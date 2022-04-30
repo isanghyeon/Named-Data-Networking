@@ -1,0 +1,14 @@
+version: '3'
+
+services:
+  producerC:
+    image: cpd9957/named_data_networking:aes-0.1
+    volumes:
+      - "/home/lsh/Desktop/CALab-NDN-Dev/src/producer/shared:/usr/src/app/shared"
+    ports:
+      - "30143:6363/tcp"
+      - "30143:6363/udp"
+      - "30144:8080/tcp"
+    networks:
+      - default
+

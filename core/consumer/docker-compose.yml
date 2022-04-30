@@ -1,0 +1,17 @@
+version: '3'
+
+services:
+  consumerA:
+    image: cpd9957/named_data_networking:aes-0.1
+    volumes:
+      - "/home/lsh/Desktop/CALab-NDN-Dev/src/consumer/shared:/usr/src/app/shared"
+    ports:
+      - "30141:6363/tcp"
+      - "30141:6363/udp"
+      - "30142:8080/tcp"
+#    command:
+#      - "nfdc face create tcp4://192.168.0.119:30141"
+#      - "nfdc route add /example/testApp/randomData tcp4://192.168.0.119:30141"
+    networks:
+      - default
+
