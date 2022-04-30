@@ -7,3 +7,6 @@
 [submodule "NFD"]
 	path = NFD
 	url = https://github.com/named-data/NFD
+[submodule "openssl"]
+	path = openssl
+	url = https://github.com/openssl/openssl
