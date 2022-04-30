@@ -1,0 +1,6 @@
+[submodule "ndn-tools"]
+	path = ndn-tools
+	url = https://github.com/named-data/ndn-tools
+[submodule "ndn-cxx"]
+	path = ndn-cxx
+	url = https://github.com/named-data/ndn-cxx
