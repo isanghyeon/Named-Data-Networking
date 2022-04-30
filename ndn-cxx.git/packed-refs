@@ -1,0 +1,72 @@
+# pack-refs with: peeled fully-peeled sorted 
+699725dae197531eec473e0a692b240503e7f1a0 refs/heads/feature-schema
+2e52d7cab4e03631db7f6c89a2daf7de590dd29e refs/heads/feature-wifi
+9ee770bdcd4f26ab596ce1a336237e237383e9bc refs/heads/master
+cc1e41cd4088bc73b8666f3da998b735b1c7965c refs/pull/1/head
+a6e65f89f24a5b4de3adfabc8eb6e0d4d1c743e9 refs/pull/1/merge
+cc68e9bd471fc5c8e53b36273e3d7db014961fa1 refs/pull/2/head
+7b0571e45731eed69c06e02e3b5af6db035cef5e refs/pull/2/merge
+82838beab528bd537eb3b70c138e479d7edaba3c refs/pull/3/head
+e9bffa280f5ca29a06a5ef33fec25a06826f64cf refs/pull/4/head
+a76a8056e9f88f89a69e4816c7a3ca5a72df5945 refs/pull/4/merge
+3ad1e4fc15e195090f7f2cd8ace0b78d215a12ad refs/pull/5/head
+050757ea4652d8bd43014bf3b058f9a156c1be28 refs/pull/5/merge
+1189cd58d87a8449d0a4536948f464c545547f86 refs/pull/6/head
+c672a441d1789cf5d97cba18b493c6bb34bd653d refs/pull/6/merge
+da2122f72dbde9801baad0da08dad85630fdf0d1 refs/pull/7/head
+aa9275ed1d1d6ac0047d5091df1e406ce541e0a3 refs/pull/8/head
+991a74a0375588bdec7268ed1fd0dfc114f046ec refs/pull/8/merge
+76a4f4f8e9885d9bb4ccad7ba8316f5d63ad1401 refs/tags/ndn-cxx-0.1.0
+^cfe0b06cce85dc091858680a740c2b4bd493a759
+4b07fc7f839adfe6d062239ad3e3ae21b7583128 refs/tags/ndn-cxx-0.1.0-rc1
+^f82d13a4741796b46371efdf938f5dfc1266e99a
+de8a24a4dfdbeffd9c70db33bb4d035bf6e0f72c refs/tags/ndn-cxx-0.2.0
+^ec0499f9998bb97669b0f494fbaec65f2afeaad9
+649aa45424478984383ede6d720253b6a80f872a refs/tags/ndn-cxx-0.2.0-rc1
+^d36dd55e3b14ca2cb7ff085db1f5b450ebfa8254
+ef0581743d8e9630d6f682fffd5f927253971864 refs/tags/ndn-cxx-0.2.0-rc2
+^d1f34e864909bd07ce46e4906b4fa0cd06f0b6ca
+7b8fe1fe893fdf62c4b597436fc70da2eb465eac refs/tags/ndn-cxx-0.3.0
+^5946ed104b3e476d2de41bdc45da127efc5cfc53
+605a977ad85fb6d4d1b33ec39b7f463b376c0249 refs/tags/ndn-cxx-0.3.0-dev-pre-c++11
+^5de006becbb60e4a8bd6492143b53b3d33c9961c
+d768745d12dc7416cf452880a56fcc502eccfee8 refs/tags/ndn-cxx-0.3.1
+^a5c5a13470d6c0190efd21df8e83f18bf33a876a
+5f3287185ca52613e04a18126fe58380aa3ab7f3 refs/tags/ndn-cxx-0.3.2
+^cbf054dd31596160b181ed60befe25ef388cb674
+76341df1c37e1744dcfcb66768e2de630b87bd5b refs/tags/ndn-cxx-0.3.3
+^2d6954c574e6bfa00cdede84694df18974e18679
+157e225c8923f6ea1a4cd71462f712df9ba57726 refs/tags/ndn-cxx-0.3.4
+^6fa52970f35a58df85dae9c1cca7be6c58ab7d0a
+8619ad7aabc9d0abeb00a1ad795dd664b77cc11a refs/tags/ndn-cxx-0.4.0
+^ed2aebafae2071abe9b1ba4fa11a3de0d6bcd59b
+d06f7da07174e338169eb02d0bdc487af04b63a5 refs/tags/ndn-cxx-0.4.0-beta1
+^45312f55c386236b082318e816afd22bed0f5e45
+e913053782c7407dbd0434cf308ecb6303d39e05 refs/tags/ndn-cxx-0.4.0-beta2
+^3507b553c8cb336effd1cc311d85577ff1211566
+75d33c3beda37048c5de26818f5a7ccf70f8471a refs/tags/ndn-cxx-0.4.0-rc1
+^45312f55c386236b082318e816afd22bed0f5e45
+48d12fa49142f41d3d6053568a6aa6e505f950b7 refs/tags/ndn-cxx-0.4.1
+^2e52d7cab4e03631db7f6c89a2daf7de590dd29e
+dea8193e9ea43d309d1dad6d7993a3de13470c90 refs/tags/ndn-cxx-0.5.0
+^4df2230ba33c56e964e3df501ebf6f7a2e2ab0d5
+a72bf8c825218bae36e46e6ff0433019cd5e6377 refs/tags/ndn-cxx-0.5.1
+^aa8b3785d6512c6e72f95997e06ef02228b2be5b
+aee5d0d26102a7d01a693afc267a0c58289c6c45 refs/tags/ndn-cxx-0.6.0
+^c381bca7f6f5330ed9000ea6b1144e2b4487da25
+48b1390d303493a4c8170bd2ef611c9fd485af3d refs/tags/ndn-cxx-0.6.1
+^f47cef64a2c708bd6add56c8264012cc1bba6a37
+5c1396fb692a584c1320a61d906d953ebcebc845 refs/tags/ndn-cxx-0.6.2
+^d9b083e8253575bd0049d3ca4521a07817d0acf1
+dec65b01c0fdbbcfa4699c4f9b9b1d78b1a56d3a refs/tags/ndn-cxx-0.6.3
+^a3bf4319ed483a4a6fe2c96b79ec4491d7217f00
+b1765d608c5c5c55abc824e1771434e4afe47779 refs/tags/ndn-cxx-0.6.5
+^b72360faeed901daee24c6ff8df5918e225f702e
+af4729cdbbccca35040c0eeb36bdf4bbf0571df0 refs/tags/ndn-cxx-0.6.6
+^0d748af32fd701b0d4fb6088a472f336790ee6f9
+f99bfb8f09641b979f6177468359e9292d071bd8 refs/tags/ndn-cxx-0.7.0
+^cf8ffd495a51fc9a1fecc9ee20b4a5a82dcbd850
+9df0116c4e6c8d8f584f01f94bca47afd2adf685 refs/tags/ndn-cxx-0.7.1
+^bdfb53aa09be3b0095b5392c0c24bef23c291e2f
+2737704b9e414a04fa408b0493c06953f7db25c9 refs/tags/ndn-cxx-0.8.0
+^778ad714f0d6dff8f5e75bdfea2658002b95bbd1
