@@ -42,11 +42,6 @@
 #include <boost/range/adaptor/reversed.hpp>
 #include <boost/range/concepts.hpp>
 
-typedef unsigned char byte;
-typedef std::basic_string<char, std::char_traits<char>, zallocator < char> >
-secure_string;
-using EVP_CIPHER_CTX_ptr = std::unique_ptr<EVP_CIPHER_CTX, decltype(&::EVP_CIPHER_CTX_free)>;
-
 namespace ndn {
 
     BOOST_CONCEPT_ASSERT((boost::EqualityComparable<Name>));
