@@ -7,9 +7,6 @@
 #ifndef NDN_CXX_SECURITY_TRANSFORM_AES_CIPHER_HPP
 #define NDN_CXX_SECURITY_TRANSFORM_AES_CIPHER_HPP
 
-typedef unsigned char byte;
-typedef std::basic_string<char, std::char_traits<char>, zallocator<char> > secure_string;
-using EVP_CIPHER_CTX_ptr = std::unique_ptr<EVP_CIPHER_CTX, decltype(&::EVP_CIPHER_CTX_free)>;
 
 #include <openssl/conf.h>
 #include <openssl/evp.h>
