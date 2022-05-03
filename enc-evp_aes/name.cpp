@@ -27,15 +27,25 @@
 #include "ndn-cxx/encoding/block.hpp"
 #include "ndn-cxx/encoding/encoding-buffer.hpp"
 #include "ndn-cxx/util/time.hpp"
-#include "ndn-cxx/security/transform/aes-cipher.hpp"
+// #include "ndn-cxx/security/transform/aes-cipher.hpp"
 
-#include <sstream>
+#include <stdio.h>
+#include <string.h>
 #include <iostream>
 #include <string>
+#include <openssl/conf.h>
+#include <openssl/evp.h>
+#include <openssl/err.h>
+
 #include <sstream>
 #include <boost/functional/hash.hpp>
 #include <boost/range/adaptor/reversed.hpp>
 #include <boost/range/concepts.hpp>
+
+typedef unsigned char byte;
+typedef std::basic_string<char, std::char_traits<char>, zallocator < char> >
+secure_string;
+using EVP_CIPHER_CTX_ptr = std::unique_ptr<EVP_CIPHER_CTX, decltype(&::EVP_CIPHER_CTX_free)>;
 
 namespace ndn {
 
@@ -97,31 +107,26 @@ namespace ndn {
                 uri.erase(0, 1);
             }
         }
-        std::string ExceptKeyword[] = {"localhost", "ndn", "nfd", "status", "faces", "create", "update", "destroy",
-                                       "list", "channels", "query", "events", "fib", "add-nexthop", "remove-nexthop",
-                                       "cs", "config", "erase", "info", "strategy-choice", "set", "unset", "rib",
-                                       "register", "unregister"};
+
+        std::string ExceptionKeyword[] = {"localhost", "ndn", "nfd", "status", "faces", "create", "update", "destroy", "list",
+                                          "channels", "query", "events", "fib", "add-nexthop", "remove-nexthop", "cs", "config",
+                                          "erase", "info", "strategy-choice", "set", "unset", "rib", "register", "unregister"};
+
+        std::string key = "01234567890123456789012345678901";
+        std::string iv = "0123456789012345";
 
         size_t iComponentStart = 0;
-        /* 128 bit key IV*/
-        unsigned char *key = (unsigned char *) "2DE79D232DF5585D68CE47882AE256D6";
-        unsigned char *iv = (unsigned char *) "CBD09280979564AB";
-
-        int check = 0;
-        int ciphertext_len;
-        unsigned char *P;
-        unsigned char *C;
-        unsigned char *out;
         std::string comparison = uri.substr(iComponentStart, uri.find('/', iComponentStart) - iComponentStart);
 
-        // Unescape the components.
-        for (auto cmp: ExceptKeyword) {
+        int check = 0, ciphertext_len;
+        char P[128], C[128], finalizationOutput[128];
+
+        for (auto cmp: ExceptionKeyword) {
             if (comparison.compare(cmp) == 0) {
                 check = 1;
                 break;
-            } else {
+            } else
                 check = 0;
-            }
         }
 
         if (check == 0) {
@@ -132,12 +137,13 @@ namespace ndn {
 
                 memset(P, 0, 128);
                 memset(C, 0, 128);
-                memset(out, 0, 128);
-                strcpy((char *) P, uri.substr(iComponentStart, iComponentEnd - iComponentStart).c_str());
-                ciphertext_len = Encrypt(P, strlen((const char *) P), key, iv, C);
-                str2hex(C, out, ciphertext_len);
+                memset(finalizationOutput, 0, 128)
+                strcpy(P, uri.substr(iComponentStart, iComponentEnd - iComponentStart).c_str());
+                ciphertext_len = EVP_AES_encrypt(P, strlen(P), key.c_str(), iv.c_str(), C);
 
-                append(Component::fromEscapedString((const char *) out));
+                str2hex(C, finalizationOutput, ciphertext_len);
+
+                append(Component::fromEscapedString(finalizationOutput));
                 iComponentStart = iComponentEnd + 1;
             }
         } else {
@@ -260,8 +266,7 @@ namespace ndn {
 
     Name &
     Name::appendVersion(const optional <uint64_t> &version) {
-        return append(
-                Component::fromVersion(version.value_or(time::toUnixTimestamp(time::system_clock::now()).count())));
+        return append(Component::fromVersion(version.value_or(time::toUnixTimestamp(time::system_clock::now()).count())));
     }
 
     Name &
@@ -282,8 +287,7 @@ namespace ndn {
         return *this;
     }
 
-    static constexpr uint8_t
-            SHA256_OF_EMPTY_STRING[] = {
+    static constexpr uint8_t SHA256_OF_EMPTY_STRING[] = {
             0xe3, 0xb0, 0xc4, 0x42, 0x98, 0xfc, 0x1c, 0x14,
             0x9a, 0xfb, 0xf4, 0xc8, 0x99, 0x6f, 0xb9, 0x24,
             0x27, 0xae, 0x41, 0xe4, 0x64, 0x9b, 0x93, 0x4c,
