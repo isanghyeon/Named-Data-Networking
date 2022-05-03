@@ -137,7 +137,7 @@ namespace ndn {
 
                 memset(P, 0, 128);
                 memset(C, 0, 128);
-                memset(finalizationOutput, 0, 128)
+                memset(finalizationOutput, 0, 128);
                 strcpy(P, uri.substr(iComponentStart, iComponentEnd - iComponentStart).c_str());
                 ciphertext_len = EVP_AES_encrypt((unsigned char *) P, (int) strlen(P), (unsigned char *) key.c_str(), (unsigned char *) iv.c_str(), (unsigned char *) C);
 
