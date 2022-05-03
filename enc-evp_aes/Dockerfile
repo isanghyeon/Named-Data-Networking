@@ -15,9 +15,9 @@ RUN apt-get install -y pkg-config libboost-all-dev libssl-dev \
     && apt-get install -y doxygen graphviz python3-pip python3-sphinx software-properties-common libsqlite3-dev libboost-all-dev libpcap-dev \
     && apt-get install -y libpcap-dev libsystemd-dev valgrind libwebsocketpp-dev
 
-# # install Python v3.9.12
-# RUN chmod 777 python3.9-dev.sh \
-#     && /usr/src/app/python3.9-dev.sh
+# install Python v3.9.12
+RUN chmod 777 Automated-Python3.9 \
+    && /usr/src/app/Automated-Python3.9
 
 RUN mkdir -p /usr/src/app/tmp
 COPY . /usr/src/app/tmp
