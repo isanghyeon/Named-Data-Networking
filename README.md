@@ -16,12 +16,21 @@
 [Named-Data-GitHub] - Official NDN GitHub Repository
 
 ----
-## Cipher Types and Server Environment
+## Cipher Types
 | Type | Docker Hub | Base OS Img | PATH |
 |:------------|:--------------------------|:------------|:-----------------:|  
-| AES | cpd9957/named_data_networking:aes-0.2 | Ubuntu 20.04 LTS  | [enc-evp_aes/README.md] |
-| Format Preserving Encryption | cpd9957/named_data_networking:fpe-0.9 | Ubuntu 20.04 LTS | [enc-fpe_ff3/README.md]|
-| None | cpd9957/named_data_networking:0.1 | Ubuntu 20.04 LTS | [enc-none/README.md]|
+| AES | cpd9957/named_data_networking:aes-0.2 | Ubuntu 20.04 LTS  | [enc-evp_aes/] |
+| Format Preserving Encryption | cpd9957/named_data_networking:fpe-0.9 | Ubuntu 20.04 LTS | [enc-fpe_ff3/]|
+| None | cpd9957/named_data_networking:0.1 | Ubuntu 20.04 LTS | [enc-none/]|
+
+## Server Environment
+| Dir Name | Description 
+|:------------|:--------------------------|
+| core | core |
+| enc-evp_aes | enc-evp_aes |
+| enc-fpe_ff3 | enc-fpe_ff3 | 
+| enc-none | enc-none |
+| tests | test |
 
 ----
 
@@ -34,3 +43,7 @@
 [NDN-GitHub-NLSR]: <https://github.com/named-data/NLSR>
 [OpenSSL]: <https://openssl.org/>
 [Format-Preserving-Encryption]: <https://github.com/0NG/Format-Preserving-Encryption>
+
+[enc-evp_aes/]: <https://github.com/isanghyeon/CALab_Named-Data/blob/main/enc-evp_aes/README.md>
+[enc-fpe_ff3/]: <https://github.com/isanghyeon/CALab_Named-Data/blob/main/enc-fpe_ff3/README.md>
+[enc-none/]: <https://github.com/isanghyeon/CALab_Named-Data/blob/main/enc-none/README.md>
