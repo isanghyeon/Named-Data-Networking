@@ -16,15 +16,12 @@
 [Named-Data-GitHub] - Official NDN GitHub Repository
 
 ----
-## Server Environment
-| Type | Server Info | IP Addr | Environment | README |
-|:-----|:--------------------------|:-----|:------------|:------------:|  
-| Consumer | ndn-consrouter:ndn | 192.168.0.106 | Ubuntu 20.04.3 LTS, Docker version 20.10.12, build e91ed57 | [src/ndn_dev-ConsumerA][Consumer-A] [src/ndn_dev-ConsumerB][Consumer-B] |
-| Router | ndn-router1:router | 192.168.0.99 | Ubuntu 20.04.3 LTS | [src/ndn_dev-router][router] |
-| Router | ndn-router2:router | 192.168.0.100 | Ubuntu 20.04.3 LTS | [src/ndn_dev-router][router] |
-| Router | ndn-router3:router | 192.168.0.101 | Ubuntu 20.04.3 LTS | [src/ndn_dev-router][router] |
-| Producer | ndn-producer:producer | 192.168.0.104 | Ubuntu 20.04.3 LTS, Docker version 20.10.12, build e91ed57 | [src/ndn_dev-ProducerC][Producer-C] [src/ndn_dev-ProducerD][Producer-D] |
-
+## Cipher Types and Server Environment
+| Type | Docker Hub | Base OS Img | PATH |
+|:------------|:--------------------------|:------------|:-----------------:|  
+| AES | cpd9957/named_data_networking:aes-0.2 | Ubuntu 20.04 LTS  | [enc-evp_aes/README.md] |
+| Format Preserving Encryption | cpd9957/named_data_networking:fpe-0.9 | Ubuntu 20.04 LTS | [enc-fpe_ff3/README.md]|
+| None | cpd9957/named_data_networking:0.1 | Ubuntu 20.04 LTS | [enc-none/README.md]|
 
 ----
 
