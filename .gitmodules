@@ -10,3 +10,6 @@
 [submodule "openssl"]
 	path = openssl
 	url = https://github.com/openssl/openssl
+[submodule "ndnSIM"]
+	path = ndnSIM
+	url = https://github.com/named-data-ndnSIM/ndnSIM
