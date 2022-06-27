@@ -1,14 +1,36 @@
 version: '3'
 
 services:
-  producerC:
-    image: cpd9957/named_data_networking:aes-0.1
+  aes:
+    image: cpd9957/named_data_networking:aes-0.2
     volumes:
-      - "/home/lsh/Desktop/CALab-NDN-Dev/src/producer/shared:/usr/src/app/shared"
+      - "/home/producer/core/producer/shared:/usr/src/app/shared"
     ports:
-      - "30143:6363/tcp"
-      - "30143:6363/udp"
-      - "30144:8080/tcp"
+      - "40010:6363/tcp"
+      - "40010:6363/udp"
+      - "40011:8080/tcp"
     networks:
       - default
 
+  fpe:
+    image: cpd9957/named_data_networking:fpe-0.9
+    volumes:
+      - "/home/producer/core/producer/shared:/usr/src/app/shared"
+    ports:
+      - "40012:6363/tcp"
+      - "40012:6363/udp"
+      - "40013:8080/tcp"
+    networks:
+      - default
+
+
+  none:
+    image: cpd9957/named_data_networking:0.1
+    volumes:
+      - "/home/producer/core/producer/shared:/usr/src/app/shared"
+    ports:
+      - "40014:6363/tcp"
+      - "40014:6363/udp"
+      - "40015:8080/tcp"
+    networks:
+      - default

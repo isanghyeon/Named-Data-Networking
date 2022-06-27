@@ -1,17 +1,36 @@
 version: '3'
 
 services:
-  consumerA:
-    image: cpd9957/named_data_networking:aes-0.1
+  aes:
+    image: cpd9957/named_data_networking:aes-0.2
     volumes:
-      - "/home/lsh/Desktop/CALab-NDN-Dev/src/consumer/shared:/usr/src/app/shared"
+      - "/home/consumer/core/consumer/shared:/usr/src/app/shared"
     ports:
-      - "30141:6363/tcp"
-      - "30141:6363/udp"
-      - "30142:8080/tcp"
-#    command:
-#      - "nfdc face create tcp4://192.168.0.119:30141"
-#      - "nfdc route add /example/testApp/randomData tcp4://192.168.0.119:30141"
+      - "40010:6363/tcp"
+      - "40010:6363/udp"
+      - "40011:8080/tcp"
     networks:
       - default
 
+  fpe:
+    image: cpd9957/named_data_networking:fpe-0.9
+    volumes:
+      - "/home/consumer/core/consumer/shared:/usr/src/app/shared"
+    ports:
+      - "40012:6363/tcp"
+      - "40012:6363/udp"
+      - "40013:8080/tcp"
+    networks:
+      - default
+
+
+  none:
+    image: cpd9957/named_data_networking:0.1
+    volumes:
+      - "/home/consumer/core/consumer/shared:/usr/src/app/shared"
+    ports:
+      - "40014:6363/tcp"
+      - "40014:6363/udp"
+      - "40015:8080/tcp"
+    networks:
+      - default
