@@ -13,3 +13,6 @@
 [submodule "ndnSIM"]
 	path = ndnSIM
 	url = https://github.com/named-data-ndnSIM/ndnSIM
+[submodule "name-based-access-control"]
+	path = name-based-access-control
+	url = https://github.com/named-data/name-based-access-control
