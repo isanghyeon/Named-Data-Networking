@@ -71,9 +71,9 @@ namespace ndn {
         if (uri.empty())
             return;
 
-        std::cout << "uri :: ";
-        std::cout << uri;
-        std::cout << std::endl; // ndn:/localhost/nfd
+//        std::cout << "uri :: ";
+//        std::cout << uri;
+//        std::cout << std::endl; // ndn:/localhost/nfd
 
         size_t iColon = uri.find(':');
         if (iColon != std::string::npos) {
@@ -100,9 +100,9 @@ namespace ndn {
                 uri.erase(0, 1);
             }
         }
-        std::cout << "uri trim :: ";
-        std::cout << uri;
-        std::cout << std::endl;
+//        std::cout << "uri trim :: ";
+//        std::cout << uri;
+//        std::cout << std::endl;
 
         std::string test[] = {"localhost", "ndn", "nfd", "status", "faces", "create", "update", "destroy", "list",
                               "channels", "query", "events", "fib", "add-nexthop", "remove-nexthop", "cs", "config",
@@ -144,11 +144,11 @@ namespace ndn {
                 // printf(" %s\n", pt);
                 FPE_ff3_encrypt(pt, ct, ff3);
 
-                std::cout << "uri enc :: ";
-                std::cout << pt;
-                std::cout << "\n";
-                std::cout << ct;
-                std::cout << std::endl;
+//                std::cout << "uri enc :: ";
+//                std::cout << pt;
+//                std::cout << "\n";
+//                std::cout << ct;
+//                std::cout << std::endl;
 
                 append(Component::fromEscapedString(ct));
                 iComponentStart = iComponentEnd + 1;
