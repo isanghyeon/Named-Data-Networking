@@ -16,3 +16,9 @@
 [submodule "name-based-access-control"]
 	path = name-based-access-control
 	url = https://github.com/named-data/name-based-access-control
+[submodule "hiredis"]
+	path = hiredis
+	url = https://github.com/redis/hiredis
+[submodule "redis-plus-plus"]
+	path = redis-plus-plus
+	url = https://github.com/sewenew/redis-plus-plus
