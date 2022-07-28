@@ -4,3 +4,5 @@ calab-ndn-dev-s3un9s00n-dev
 .idea/
 cmake-build-debug/
 CMakeLists.txt
+tests
+key-exchangec
