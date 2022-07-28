@@ -76,8 +76,8 @@ RUN git clone https://github.com/sewenew/redis-plus-plus.git /usr/src/app/redis-
     && cd ..
 
 # initial configuration
-RUN cp /usr/local/etc/ndn/nfd.conf.sample /usr/local/etc/ndn/nfd.conf
-    && ndnsec-keygen /`whoami` | ndnsec-install-cert - \\
+RUN cp /usr/local/etc/ndn/nfd.conf.sample /usr/local/etc/ndn/nfd.conf \
+    && ndnsec-keygen /`whoami` | ndnsec-install-cert - \
     && mkdir -p /usr/local/etc/ndn/keys \
     && ndnsec-cert-dump -i /`whoami` > default.ndncert \
     && mv default.ndncert /usr/local/etc/ndn/keys/default.ndncert

@@ -3,8 +3,8 @@
 # Email: cpd4268@sch.ac.kr
 # Web: http://logos.sch.ac.kr
 
-ENV version=0.6
-ENV name=ndn_test
+export version=0.6
+export name=ndn_test
 
 
 echo "============== Image Build ================="
