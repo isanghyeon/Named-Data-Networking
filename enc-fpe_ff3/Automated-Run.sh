@@ -1,36 +1,34 @@
 #!/bin/bash
-# Copyright (c) 2022 Sang-hyeon Lee All Rights Reserved.
+# Copyright (c) 2022 Sang Hyeon Lee All Rights Reserved.
 # Email: cpd4268@sch.ac.kr
 # Web: http://logos.sch.ac.kr
+
+ENV version=0.6
+ENV name=ndn_test
 
 
 echo "============== Image Build ================="
 
-docker build -t ndn_test:0.5 .
+docker build -t $name:$version .
 sleep 2
 
 echo "============== Image checker ================="
 
-echo "ndn_test:: " $(docker images | grep "ndn_test:0.5")
+echo "$name"
+echo $(docker images | awk '{print $1":"$2}' | grep $name)
 sleep 2
 
 echo "============== Container Running ================="
 
-docker stop "test_ndn-0.1-consumer"
-docker stop "test_ndn-0.1-producer"
-
-docker rm "test_ndn-0.1-consumer"
-docker rm "test_ndn-0.1-producer"
-
-docker run -d -it --name "test_ndn-0.1-consumer" -p 50001:6363 -p 50002:8080 -v $(pwd):/home ndn_test:0.5
-docker run -d -it --name "test_ndn-0.1-producer" -p 50003:6363 -p 50004:8080 -v $(pwd):/home ndn_test:0.5
+docker run -d -it --name "test_ndn-$version-consumer" -p 50001:6363 -p 50002:8080 -v $(pwd):/home $name:$version
+docker run -d -it --name "test_ndn-$version-producer" -p 50003:6363 -p 50004:8080 -v $(pwd):/home $name:$version
 
 sleep 2
 
 echo "============== Container checker ================="
 
-echo "consumer:: " $(docker ps -a | grep "test_ndn-0.1-consumer")
-echo "producer:: " $(docker ps -a | grep "test_ndn-0.1-producer")
+echo "consumer:: " $(docker ps -a | grep "test_ndn-$version-consumer")
+echo "producer:: " $(docker ps -a | grep "test_ndn-$version-producer")
 sleep 2
 
 
