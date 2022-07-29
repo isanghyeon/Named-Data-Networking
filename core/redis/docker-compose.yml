@@ -7,7 +7,7 @@ services:
     ports:
       - "20000:6379"
     restart: always
-    command: redis-server /usr/src/app/conf/redis.conf
+    # command: redis-server /usr/src/app/conf/redis.conf
     volumes:
-      - $(pwd):/usr/src/app/data
-      - ./conf/redis.conf:/usr/src/app/conf/redis.conf
+      - /home/CALab_Named-Data/core/redis/data:/usr/src/app/data
+      # - ./conf/redis.conf:/usr/src/app/conf/redis.conf
