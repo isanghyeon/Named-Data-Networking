@@ -12,14 +12,16 @@ typedef struct MemoryStruct {
 
 static size_t
 WriteMemoryCallback(void *, size_t, size_t, void *);
+    
+static string sha256(const string);
 
 class KeyManagement {
 public:
-    KeyManagement();
+    KeyManagement(char *);
     ~KeyManagement();
     string KeyGenerate();
     void KeyExchange();
-    void getLifecycle();
+    string getLifecycle();
     string Connect(string);
 
 private:
@@ -27,4 +29,5 @@ private:
     CURLcode res;
     struct curl_slist *list;
     MemoryStruct chunk;
+    string name;
 };
