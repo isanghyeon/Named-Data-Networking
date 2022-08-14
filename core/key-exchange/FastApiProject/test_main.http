@@ -1,0 +1,24 @@
+# Test your FastAPI endpoints
+
+GET http://192.168.0.6:8000/
+Accept: application/json
+
+###
+
+GET http://192.168.0.6:8000/exchange/User/1
+Accept: application/json
+Authorization: asdasd
+
+###
+
+GET http://192.168.0.6:8000/generator/User
+Accept: application/json
+Authorization: asdasd
+
+###
+
+GET http://192.168.0.6:8000/lifecycle/User
+Accept: application/json
+Authorization: asdasd
+
+###
