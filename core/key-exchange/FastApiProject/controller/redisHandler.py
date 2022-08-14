@@ -1,8 +1,7 @@
-import logging
-from typing import Union
 import datetime
-from redis.asyncio import Redis, from_url
 import string
+from typing import Union
+from redis.asyncio import Redis, from_url
 
 
 class redisObject:
@@ -23,8 +22,6 @@ class redisObject:
         try:
             print("[+] transaction init")
             async with self.handler.pipeline(transaction=True) as pipe:
-                print(f"[+] type :: {type(object)}")
-
                 if type(object) is dict:
                     if not all(object.values()):
                         for idx in object.keys():
@@ -32,8 +29,7 @@ class redisObject:
                             # raise Exception("Key generator is down, Please contact admin.")
 
                     if self.db == 0:
-                        await pipe.set(object["item"], object["value"], object["ttl"]).execute()
-
+                        await pipe.set(name=object["item"], ex=None if object["ttl"] == "" else object["ttl"], value=object["value"]).execute()
 
                 if type(object) is list:
                     for objVar in object:
@@ -43,29 +39,70 @@ class redisObject:
                             # objVar[idx] = '' if objVar[idx] is None else objVar[idx]
 
                         if self.db == 1:
-                            await pipe.set(objVar["name"], objVar["value"]).execute()
+                            await pipe.set(name=objVar["name"], value=objVar["value"]).execute()
 
         except Exception as e:
             print("[-] ", e, " ", datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
         finally:
             print("[*] done")
 
-    async def getAllObject(self, object: str):
+    async def setExpired(self, object: dict) -> None:
+        print("[*] setExpired", datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
+        print("[+] start")
         await self.initialization()
-        async with self.handler.pipeline(transaction=True) as pipe:
-            result = await pipe.hgetall(name=object).execute()
 
-        assert result
+        try:
+            print("[+] transaction init")
+            async with self.handler.pipeline(transaction=True) as pipe:
+                await pipe.expire(name=object["name"], time=object["time"], xx=True).execute()
 
-        return result
+        except Exception as e:
+            print("[-] ", e, " ", datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
+        finally:
+            print("[*] done")
 
-    async def getObject(self, object: dict):
+    async def getObject(self, object: str, types: bool) -> Union[str, list]:
+        print("[*] getObject", datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
+        print("[+] start")
         await self.initialization()
-        async with self.handler.pipeline(transaction=True) as pipe:
-            result = await pipe.hmget(name=object["name"], keys=object["keys"]).execute()
-            EOL = await pipe.ttl(name=object["name"]).execute()
 
-        assert result
-        assert EOL
+        result = Union[str, list]
 
-        return result, EOL
+        try:
+            print("[+] transaction init")
+            async with self.handler.pipeline(transaction=True) as pipe:
+                if types is True:  # one key -> str
+                    result = await pipe.get(name=object).execute()
+
+                if types is False:  # various key -> dict
+                    result = (await pipe.keys(pattern=f"{object}:*").execute())[0]
+
+        except Exception as e:
+            print("[-] ", e, " ", datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
+        finally:
+            print("[*] done")
+            return result
+
+    async def getTTL(self, object: str) -> int:
+        print("[*] getTTL", datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
+        print("[+] start")
+        await self.initialization()
+
+        result = int
+
+        try:
+            print("[+] transaction init")
+            async with self.handler.pipeline(transaction=True) as pipe:
+                result = (await pipe.ttl(name=object).execute())[0]
+
+            if 180 > result > 100:
+                await self.setExpired(object={
+                    "name": object,
+                    "time": result + 300
+                })
+
+        except Exception as e:
+            print("[-] ", e, " ", datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
+        finally:
+            print("[*] done")
+            return result

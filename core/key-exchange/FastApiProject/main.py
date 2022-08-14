@@ -24,19 +24,19 @@ from dependencies import getHeaderAuthorization
 app.include_router(
     exchange.app,
     tags=["exchange"],
-    dependencies=[Depends(getHeaderAuthorization)],
+    # dependencies=[Depends(getHeaderAuthorization)],
     responses={200: {"description": "key exchange api"}}
 )
 app.include_router(
     generator.app,
     tags=["generator"],
-    dependencies=[Depends(getHeaderAuthorization)],
+    # dependencies=[Depends(getHeaderAuthorization)],
     responses={200: {"description": "key generator api"}}
 )
 app.include_router(
     lifecycle.app,
     tags=["lifecycle"],
-    dependencies=[Depends(getHeaderAuthorization)],
+    # dependencies=[Depends(getHeaderAuthorization)],
     responses={200: {"description": "key lifecycle api"}}
 )
 

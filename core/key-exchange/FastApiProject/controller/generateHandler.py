@@ -58,8 +58,7 @@ class generator:
             "exchange-time": None,
             "FPEKey": keyExport.FPEKey["key"],
             "FPETweak": keyExport.FPEKey["tweak"],
-            "SKey": keyExport.SKey,
-            "lifecycle": endOfLifetime.EOL
+            "SKey": keyExport.SKey
         }
 
         try:
@@ -69,7 +68,7 @@ class generator:
                 await redisObj.setObject(object={
                     "item": f"{name}:{_}",
                     "value": data[_],
-                    "ttl": data["lifecycle"]
+                    "ttl": endOfLifetime.EOL if "-time" not in _ else None
                 })
 
         except Exception as e:

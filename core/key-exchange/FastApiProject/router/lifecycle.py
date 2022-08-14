@@ -1,3 +1,4 @@
+import json
 import time
 from typing import Union, List
 
@@ -12,28 +13,26 @@ app = APIRouter()
 
 @app.get("/lifecycle")
 async def appLifecycle(Authorization: Union[str, None] = Header(default=None)):
-    result, EOL = await redisObject().getObject(object={
-        "name": Authorization,
-        "keys": ["generate-time", "exchange-time"]
-    })
+    EoL = {}
 
-    data = {
-        "name": Authorization,
-        "generate-time": result[0][0].decode("utf-8"),
-        "exchange-time": result[0][1].decode("utf-8"),
-        "key": None,
-        "tweak": None,
-        "lifecycle": EOL[0]
-    }
+    try:
+        redisObj = redisObject(db=0)
 
-    print(data)
+        key = await redisObj.getObject(object=Authorization, types=False)
 
+        for _ in key:
+            EoL[_.decode('utf-8')] = await redisObj.getTTL(_.decode('utf-8'))
+            if EoL[_.decode('utf-8')] == -1:
+                del EoL[_.decode('utf-8')]
 
-    return JSONResponse(
-        status_code=HTTP_200_OK,
-        content={
-            "status_code": HTTP_200_OK,
-            "message": "success",
-            "data": data
-        }
-    )
+    except Exception as e:
+        raise HTTPException(status_code=HTTP_400_BAD_REQUEST, detail=str(e))
+    finally:
+        return JSONResponse(
+            status_code=HTTP_200_OK,
+            content={
+                "status_code": HTTP_200_OK,
+                "message": "OK",
+                "data": EoL
+            }
+        )
