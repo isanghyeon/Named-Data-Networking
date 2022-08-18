@@ -11,6 +11,11 @@ app = APIRouter()
 
 @app.get("/generator")
 async def appGenerator(Authorization: str | None = Header(default=None)):
+    """
+
+    :param Authorization:
+    :return:
+    """
     try:
         await generator().publicKey(name=Authorization)
         await generator().fpeKey(name=Authorization)

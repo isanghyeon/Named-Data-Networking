@@ -5,6 +5,11 @@ from redis.asyncio import Redis, from_url
 
 class redisObject:
     def __init__(self, db: int = 0, ttl: int = -1):
+        """
+
+        :param db:
+        :param ttl:
+        """
         self.handler = None
         self.db = db
         self.ttl = ttl

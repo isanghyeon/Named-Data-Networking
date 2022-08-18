@@ -25,14 +25,14 @@ async def appExchange(Authorization: list[str] | None = Header(default=None)):
                 "message": "success",
                 "data": {
                     "name": Authorization[0],
-                    "SKey": sKey,
-                    "FPEKey": fpeKey,
-                    "FPETweak": fpeTweak
+                    "sKey": sKey,
+                    "fpeKey": fpeKey,
+                    "fpeTweak": fpeTweak
                 }
             }
         )
     except Exception as e:
-        print("error:: ", e)
+        print("[Exchange] error:: ", e)
 
 
 @app.get("/exchange/pkey")
@@ -43,8 +43,6 @@ async def appKeyExchange(Authorization: list[str] | None = Header(default=None))
     :return:
     """
     node_id = None
-
-    print(Authorization)
 
     try:
         if len(Authorization) == 2 or Authorization[2] is None or not Authorization[2]:
@@ -67,7 +65,7 @@ async def appKeyExchange(Authorization: list[str] | None = Header(default=None))
                 "message": "success",
                 "data": {
                     "name": Authorization[0],
-                    "apiPuKey": apiPuKey,
+                    "apiPubKey": apiPuKey,
                     "nodeId": str(node_id)
                 }
             }

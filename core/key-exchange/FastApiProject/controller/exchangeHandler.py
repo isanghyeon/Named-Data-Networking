@@ -8,6 +8,11 @@ import random
 
 class exchange:
     def __init__(self, name: str = None, node_id: str = None):
+        """
+
+        :param name:
+        :param node_id:
+        """
         self.sKey = None
         self.fpeKey = None
         self.fpeTweak = None
@@ -47,16 +52,16 @@ class exchange:
 
         # return self
 
-    async def encryptHandler(self) -> tuple[str, str, str]:  # , str]:
+    async def encryptHandler(self) -> tuple[str, str, str]:
         await self.getPrKeyInDB()
 
         self.fpeKey = base64.b64encode(self.symmetricObject.encrypt(self.fpeKey)).decode('utf-8')
         self.fpeTweak = base64.b64encode(self.symmetricObject.encrypt(self.fpeTweak)).decode('utf-8')
         self.sKey = base64.b64encode(self.AsymmetricObject.encrypt(self.sKey)).decode('utf-8')
 
-        return self.sKey, self.fpeKey, self.fpeTweak  # , self.nonce
+        return self.sKey, self.fpeKey, self.fpeTweak
 
-    async def decryptHandler(self) -> tuple[str, str, str, str]:
+    async def decryptHandler(self) -> tuple[str, str, str]:
         await self.getPrKeyInDB()
 
         async def symmetric(self):
