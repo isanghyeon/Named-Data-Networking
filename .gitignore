@@ -3,4 +3,5 @@
 .idea/
 tests/*
 **/backup
+__pycache__/
 *.pyc
