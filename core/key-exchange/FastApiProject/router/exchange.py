@@ -1,6 +1,5 @@
 import time
-from typing import Union, Optional
-
+import uuid
 from fastapi import APIRouter, HTTPException, Header, Request
 from starlette.responses import JSONResponse
 from starlette.status import HTTP_200_OK, HTTP_400_BAD_REQUEST
@@ -11,40 +10,65 @@ app = APIRouter()
 
 
 @app.get("/exchange")
-async def appExchange(Authorization: Union[str, None] = Header(default=None)):
-    return JSONResponse(
-        status_code=HTTP_200_OK,
-        content={
-            "status_code": HTTP_200_OK,
-            "message": "success",
-            "data": {}
-        }
-    )
+async def appExchange(Authorization: list[str] | None = Header(default=None)):
+    """
+
+    :param Authorization: list[str] => [0] hashed name, [1] node id
+    :return:
+    """
+    try:
+        sKey, fpeKey, fpeTweak = await exchange(name=Authorization[0], node_id=Authorization[1]).encryptHandler()
+        return JSONResponse(
+            status_code=HTTP_200_OK,
+            content={
+                "status_code": HTTP_200_OK,
+                "message": "success",
+                "data": {
+                    "name": Authorization[0],
+                    "SKey": sKey,
+                    "FPEKey": fpeKey,
+                    "FPETweak": fpeTweak
+                }
+            }
+        )
+    except Exception as e:
+        print("error:: ", e)
 
 
 @app.get("/exchange/pkey")
-async def appKeyExchange(Authorization: list[str] = Header(default=None)):
-    # return JSONResponse(
-    #     status_code=HTTP_200_OK,
-    #     content={
-    #         "name": Authorization[0][:Authorization[0].find(',')],
-    #         "pkey": Authorization[0][Authorization[0].find(',') + 2:]
-    #     }
-    # )
+async def appKeyExchange(Authorization: list[str] | None = Header(default=None)):
+    """
 
-    pkey = await redisObject(db=1).getObject(object=f"{Authorization[0][:Authorization[0].find(',')]}:public-key", types=True)
-    nodePKey = Authorization[0][Authorization[0].find(',') + 2:]
+    :param Authorization: list[str] => [0] hashed name, [1] node public key, [2] node id or empty
+    :return:
+    """
+    node_id = None
 
-    return JSONResponse(
-        status_code=HTTP_200_OK,
-        content={
-            "name": Authorization[0][:Authorization[0].find(',')],
-            "pkey": pkey[0].decode('utf-8')
-        }
-    )
+    print(Authorization)
 
+    try:
+        if len(Authorization) == 2 or Authorization[2] is None or not Authorization[2]:
+            node_id = uuid.uuid4()
+        else:
+            node_id = Authorization[2]
 
-@app.get("/items/{item_id}")
-async def read_root(item_id: str, request: Request):
-    client_host = request.headers
-    return {"client_host": client_host, "item_id": item_id}
+        await redisObject(db=1).setObject(object={
+            "name": f"{Authorization[0]}:node-key:{node_id}",
+            "value": Authorization[1]
+        })
+
+    finally:
+        apiPuKey = (await redisObject(db=1).getObject(object=f"{Authorization[0]}:public-key", types=True))[0]
+
+        return JSONResponse(
+            status_code=HTTP_200_OK,
+            content={
+                "status_code": HTTP_200_OK,
+                "message": "success",
+                "data": {
+                    "name": Authorization[0],
+                    "apiPuKey": apiPuKey,
+                    "nodeId": str(node_id)
+                }
+            }
+        )

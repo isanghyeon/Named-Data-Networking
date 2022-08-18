@@ -1,7 +1,5 @@
 import json
 import time
-from typing import Union, List
-
 from fastapi import APIRouter, HTTPException, Header
 from starlette.responses import JSONResponse
 from starlette.status import HTTP_200_OK, HTTP_400_BAD_REQUEST
@@ -12,7 +10,7 @@ app = APIRouter()
 
 
 @app.get("/lifecycle")
-async def appLifecycle(Authorization: Union[str, None] = Header(default=None)):
+async def appLifecycle(Authorization: str | None = Header(default=None)):
     EoL = {}
 
     try:

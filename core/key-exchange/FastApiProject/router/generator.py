@@ -1,6 +1,4 @@
 import time
-from typing import Union, List
-
 from fastapi import APIRouter, HTTPException, Header
 from starlette.responses import JSONResponse
 from starlette.status import HTTP_200_OK, HTTP_400_BAD_REQUEST
@@ -12,7 +10,7 @@ app = APIRouter()
 
 
 @app.get("/generator")
-async def appGenerator(Authorization: Union[str, None] = Header(default=None)):
+async def appGenerator(Authorization: str | None = Header(default=None)):
     try:
         await generator().publicKey(name=Authorization)
         await generator().fpeKey(name=Authorization)

@@ -1,6 +1,5 @@
 import datetime
 import string
-from typing import Union
 from redis.asyncio import Redis, from_url
 
 
@@ -11,9 +10,18 @@ class redisObject:
         self.ttl = ttl
 
     async def initialization(self) -> from_url:
-        self.handler = await from_url(f"redis://localhost:6379/{self.db}")
+        """
 
-    async def setObject(self, object: Union[dict, list]) -> None:
+        :return:
+        """
+        self.handler = await from_url(f"redis://localhost:6379/{self.db}", decode_responses=True)
+
+    async def setObject(self, object: dict | list) -> None:
+        """
+
+        :param object:
+        :return:
+        """
         print("[*] setObject", datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
         print("[+] start")
 
@@ -29,7 +37,9 @@ class redisObject:
                             # raise Exception("Key generator is down, Please contact admin.")
 
                     if self.db == 0:
-                        await pipe.set(name=object["item"], ex=None if object["ttl"] == "" else object["ttl"], value=object["value"]).execute()
+                        await pipe.set(name=object["item"], ex=None if object["ttl"] == "" or not object["ttl"] else object["ttl"], value=object["value"]).execute()
+                    if self.db == 1:
+                        await pipe.set(name=object["name"], value=object["value"]).execute()
 
                 if type(object) is list:
                     for objVar in object:
@@ -42,11 +52,16 @@ class redisObject:
                             await pipe.set(name=objVar["name"], value=objVar["value"]).execute()
 
         except Exception as e:
-            print("[-] ", e, " ", datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
+            print("[-] error:: ", e, " ", datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
         finally:
             print("[*] done")
 
     async def setExpired(self, object: dict) -> None:
+        """
+
+        :param object:
+        :return:
+        """
         print("[*] setExpired", datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
         print("[+] start")
         await self.initialization()
@@ -61,12 +76,18 @@ class redisObject:
         finally:
             print("[*] done")
 
-    async def getObject(self, object: str, types: bool) -> Union[str, list]:
+    async def getObject(self, object: str, types: bool) -> str | list | bytes:
+        """
+
+        :param object:
+        :param types:
+        :return:
+        """
         print("[*] getObject", datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
         print("[+] start")
         await self.initialization()
 
-        result = Union[str, list]
+        result = str | list | bytes
 
         try:
             print("[+] transaction init")
@@ -74,7 +95,7 @@ class redisObject:
                 if types is True:  # one key -> str
                     result = await pipe.get(name=object).execute()
 
-                if types is False:  # various key -> dict
+                if types is False:  # various key -> list
                     result = (await pipe.keys(pattern=f"{object}:*").execute())[0]
 
         except Exception as e:
@@ -84,6 +105,11 @@ class redisObject:
             return result
 
     async def getTTL(self, object: str) -> int:
+        """
+
+        :param object:
+        :return:
+        """
         print("[*] getTTL", datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
         print("[+] start")
         await self.initialization()
@@ -95,7 +121,7 @@ class redisObject:
             async with self.handler.pipeline(transaction=True) as pipe:
                 result = (await pipe.ttl(name=object).execute())[0]
 
-            if 180 > result > 100:
+            if 180 > result > 60:
                 await self.setExpired(object={
                     "name": object,
                     "time": result + 300

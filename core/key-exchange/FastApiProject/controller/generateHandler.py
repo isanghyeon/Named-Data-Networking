@@ -3,17 +3,19 @@ import string
 import time
 import datetime
 import json
+import base64
 from Cryptodome.PublicKey import RSA
 from Cryptodome import Random
+# from Cryptodome.Cipher import AES
 from controller.redisHandler import redisObject
 
 
 # keyExport Obj is same key
 class keyExport:
-    SKey = "".join(random.choice(string.hexdigits.upper()) for _ in range(16))
+    SKey = "".join(random.choice(string.hexdigits.upper()) for _ in range(16)).encode('utf-8')
     FPEKey = {
-        "key": "".join(random.choice(string.hexdigits.upper()) for _ in range(32)),
-        "tweak": "".join(random.choice(string.hexdigits.upper()) for _ in range(16))
+        "key": "".join(random.choice(string.hexdigits.upper()) for _ in range(32)).encode('utf-8'),
+        "tweak": "".join(random.choice(string.hexdigits.upper()) for _ in range(16)).encode('utf-8')
     }
     puKeyPair = RSA.generate(3096, Random.new().read)
 
@@ -26,6 +28,12 @@ class generator:
     # RSA public
     @staticmethod
     async def publicKey(name: str = None, **kwargs):
+        """
+
+        :param name:
+        :param kwargs:
+        :return:
+        """
         if name is None:
             from fastapi.exceptions import HTTPException
             raise HTTPException(status_code=400, detail="400 Bad Request")
@@ -36,19 +44,25 @@ class generator:
             await redisObject(db=1).setObject(object=[
                 {
                     "name": f"{name}:private-key",
-                    "value": privateKey.decode('utf-8')
+                    "value": privateKey
                 },
                 {
                     "name": f"{name}:public-key",
-                    "value": publicKey.decode('utf-8')
+                    "value": publicKey
                 }
             ])
 
         except Exception as e:
-            raise Exception("[Generate handler] - PK is down")
+            raise Exception(f"[Generate handler] - PK is down | [Error] - {e}")
 
     @staticmethod
     async def fpeKey(name: str = None, **kwargs):
+        """
+
+        :param name:
+        :param kwargs:
+        :return:
+        """
         if name is None:
             from fastapi.exceptions import HTTPException
             raise HTTPException(status_code=400, detail="400 Bad Request")
@@ -72,7 +86,7 @@ class generator:
                 })
 
         except Exception as e:
-            raise Exception("[Generate handler] - FPE key is down")
+            raise Exception(f"[Generate handler] - FPE key is down | [Error] - {e}")
 
     # Not Using
     # Format-Preserving Encryption
