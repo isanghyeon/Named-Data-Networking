@@ -114,13 +114,13 @@ def plot_none(none_data):
 
 if __name__ == '__main__':
 
-    with open("./consumer/aes-result.txt") as aes_f:
+    with open("backup/consumer/aes-result.txt") as aes_f:
         aes_data = aes_f.readlines()
 
-    with open("./consumer/fpe-result.txt") as fpe_f:
+    with open("backup/consumer/fpe-result.txt") as fpe_f:
         fpe_data = fpe_f.readlines()
 
-    with open("./consumer/none-result.txt") as none_f:
+    with open("backup/consumer/none-result.txt") as none_f:
         none_data = none_f.readlines()
 
     # AES

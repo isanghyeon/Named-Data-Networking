@@ -1,0 +1,82 @@
+version: '3'
+
+services: # producer container
+  node1:
+    image: cpd9957/named-data-networking:2022.08-none
+    environment:
+      - ""
+    ports:
+      - "20300:6363/tcp" # ndn 1
+      - "20300:6363/udp"
+      - "20301:6363/tcp" # ndn 2
+      - "20301:6363/udp"
+      - "20302:8080/tcp" # ndn http
+    working_dir: /usr/src/app
+    volumes:
+      - ""
+    networks:
+      - node_network
+
+  node2:
+    image: cpd9957/named-data-networking:2022.08-none
+    environment:
+      - ""
+    ports:
+      - "20304:6363/tcp" # ndn 1
+      - "20304:6363/udp"
+      - "20305:6363/tcp" # ndn 2
+      - "20305:6363/udp"
+      - "20306:8080/tcp" # ndn http
+    working_dir: /usr/src/app
+    volumes:
+      - ""
+    networks:
+      - node_network
+
+  node3:
+    image: cpd9957/named-data-networking:2022.08-none
+    environment:
+      - ""
+    ports:
+      - "20308:6363/tcp" # ndn 1
+      - "20308:6363/udp"
+      - "20309:6363/tcp" # ndn 2
+      - "20309:6363/udp"
+      - "20310:8080/tcp" # ndn http
+    working_dir: /usr/src/app
+    volumes:
+      - ""
+    networks:
+      - node_network
+
+  node4:
+    image: cpd9957/named-data-networking:2022.08-none
+    environment:
+      - ""
+    ports:
+      - "20312:6363/tcp" # ndn 1
+      - "20312:6363/udp"
+      - "20313:6363/tcp" # ndn 2
+      - "20313:6363/udp"
+      - "20314:8080/tcp" # ndn http
+    working_dir: /usr/src/app
+    volumes:
+      - ""
+    networks:
+      - node_network
+
+  node_mgnt:
+    image: python3.8-buster
+    environment:
+      - ""
+    ports:
+      - "20320:20320"
+    working_dir: /usr/src/app
+    volumes:
+      - ""
+    networks:
+      - node_network
+
+networks:
+  node_network:
+    driver: bridge

@@ -1,0 +1,7 @@
+
+src/venv
+.idea/
+__pycache__/
+unittest
+*.http
+.DS_Store
