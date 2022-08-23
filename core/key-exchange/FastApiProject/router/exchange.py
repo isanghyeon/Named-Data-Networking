@@ -32,7 +32,7 @@ async def appExchange(Authorization: list[str] | None = Header(default=None)):
             }
         )
     except Exception as e:
-        print("[Exchange] error:: ", e)
+        print("[Exchange] error:: ", e, " - ", datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
 
 
 @app.get("/exchange/pkey")

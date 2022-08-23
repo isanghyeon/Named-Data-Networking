@@ -46,9 +46,10 @@ class exchange:
         self.prKey = (await self.redisDB_1.getObject(object=list(filter(lambda x: 'public' in x, _keys_1))[0], types=True))[0].encode('utf-8')
 
         self.nodePuKey = (await self.redisDB_1.getObject(object=list(filter(lambda x: f'{self.node_id}' in x, _keys_1))[0], types=True))[0].encode('utf-8')
+        self.nodePuKey = base64.b64decode(self.nodePuKey)
 
         self.symmetricObject = AES.new(self.sKey, AES.MODE_ECB)
-        self.AsymmetricObject = PKCS1_OAEP.new(RSA.import_key(self.prKey))
+        self.AsymmetricObject = PKCS1_OAEP.new(RSA.import_key(self.nodePuKey))
 
         # return self
 

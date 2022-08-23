@@ -32,7 +32,7 @@ async def appLifecycle(Authorization: str | None = Header(default=None)):
             status_code=HTTP_200_OK,
             content={
                 "status_code": HTTP_200_OK,
-                "message": "OK",
+                "message": "success",
                 "data": EoL
             }
         )

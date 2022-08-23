@@ -4,18 +4,18 @@ import time
 import datetime
 import json
 import base64
+
 from Cryptodome.PublicKey import RSA
 from Cryptodome import Random
-# from Cryptodome.Cipher import AES
 from controller.redisHandler import redisObject
 
 
 # keyExport Obj is same key
 class keyExport:
-    SKey = "".join(random.choice(string.hexdigits.upper()) for _ in range(16)).encode('utf-8')
+    SKey = "".join(random.choice(string.hexdigits.upper()) for _ in range(32)).encode('utf-8')
     FPEKey = {
-        "key": "".join(random.choice(string.hexdigits.upper()) for _ in range(32)).encode('utf-8'),
-        "tweak": "".join(random.choice(string.hexdigits.upper()) for _ in range(16)).encode('utf-8')
+        "key": "".join(random.choice(string.hexdigits.upper()) for _ in range(64)).encode('utf-8'),
+        "tweak": "".join(random.choice(string.hexdigits.upper()) for _ in range(32)).encode('utf-8')
     }
     puKeyPair = RSA.generate(3096, Random.new().read)
 
@@ -34,10 +34,6 @@ class generator:
         :param kwargs:
         :return:
         """
-        if name is None:
-            from fastapi.exceptions import HTTPException
-            raise HTTPException(status_code=400, detail="400 Bad Request")
-
         publicKey, privateKey = keyExport.puKeyPair.public_key().export_key(), keyExport.puKeyPair.export_key()
 
         try:
@@ -63,10 +59,6 @@ class generator:
         :param kwargs:
         :return:
         """
-        if name is None:
-            from fastapi.exceptions import HTTPException
-            raise HTTPException(status_code=400, detail="400 Bad Request")
-
         data = {
             "generate-time": None,
             "exchange-time": None,
