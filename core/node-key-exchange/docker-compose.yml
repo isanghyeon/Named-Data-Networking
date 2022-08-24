@@ -29,12 +29,11 @@ services: # key-exchange container
 
 
   node_mgnt:
-    image: python3.8-buster
-    environment:
-      - ""
+    build:
+      context: .
+      dockerfile: Dockerfile
     ports:
       - "20120:20020"
-    working_dir: /usr/src/app
     volumes:
       - ""
     networks:
