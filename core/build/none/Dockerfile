@@ -6,12 +6,6 @@ ARG DEBIAN_FRONTEND=noninteractive
 
 WORKDIR /usr/src/app
 
-RUN mkdir -p /usr/src/app
-
-COPY . /usr/src/app
-
-RUN chmod -R 777 /usr/src/app
-
 # install tools
 RUN  apt-get update \
      && apt-get install -y net-tools git curl wget build-essential
@@ -19,16 +13,21 @@ RUN  apt-get update \
 # install ndn-cxx and NFD dependencies
 RUN apt-get install -y pkg-config libboost-all-dev libssl-dev \
     && apt-get install -y doxygen graphviz python3-pip python3-sphinx software-properties-common libsqlite3-dev libboost-all-dev libpcap-dev \
-    && apt-get install -y libpcap-dev libsystemd-dev valgrind libwebsocketpp-dev gcc g++ make cmake libhiredis-dev
+    && apt-get install -y libpcap-dev libsystemd-dev valgrind libwebsocketpp-dev
+
+# source copy
+COPY ./src /usr/src/app
+RUN chmod -R 777 /usr/src/app/src
 
 # install Python v3.9.12
-RUN /usr/src/app/Automated-Python3.9.sh
+RUN mkdir -p /usr/src/app/tmp
+COPY Automated-Python3.9 /usr/src/app/tmp
+RUN chmod -R 777 /usr/src/app/tmp \
+    && /usr/src/app/tmp/Automated-Python3.9
+
 
 # install ndn-cxx
 RUN git clone https://github.com/named-data/ndn-cxx.git /usr/src/app/ndn-cxx \
-    && cp -rp /usr/src/app/src/fpe-cipher.hpp /usr/src/app/ndn-cxx/ndn-cxx/security/transform \
-    && cp -rp /usr/src/app/src/fpe-cipher.cpp /usr/src/app/ndn-cxx/ndn-cxx/security/transform \
-    && cp -rp /usr/src/app/src/name.cpp /usr/src/app/ndn-cxx/ndn-cxx \
     && cd /usr/src/app/ndn-cxx \
     && ./waf configure \
     && ./waf \
