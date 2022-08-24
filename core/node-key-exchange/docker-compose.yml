@@ -3,39 +3,17 @@ version: '3'
 services: # key-exchange container
   api:
     image: cpd9957/named-data-networking:2022.08-key
-    environment:
-      - ""
     ports:
       - "20100:6363/tcp"
       - "20100:6363/udp"
-    working_dir: /usr/src/app
-    volumes:
-      - ""
     networks:
       - node_network
 
   redis:
     image: redis
-    environment:
-      - ""
     ports:
       - "6379:6379/tcp"
-      - "63794:6379/udp"
-    working_dir: /usr/src/app
-    volumes:
-      - ""
-    networks:
-      - node_network
-
-
-  node_mgnt:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    ports:
-      - "20120:20020"
-    volumes:
-      - ""
+      - "6379:6379/udp"
     networks:
       - node_network
 
