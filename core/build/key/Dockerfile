@@ -12,5 +12,6 @@ RUN apt-get install -y net-tools git curl wget build-essential
 
 RUN python3 -m pip install -r  /usr/src/app/requirements.txt
 
+RUN chmod 777 /usr/src/app/entrypoint.sh
 ENTRYPOINT /usr/src/app/entrypoint.sh && /bin/bash
 CMD ["true"]
