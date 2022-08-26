@@ -26,7 +26,7 @@ RUN mkdir -p /usr/src/app/python@3 \
 # install ndn-cxx and NFD dependencies
 RUN apt-get install -y pkg-config libboost-all-dev python3-sphinx \
     && apt-get install -y doxygen graphviz software-properties-common libboost-all-dev libpcap-dev \
-    && apt-get install -y libpcap-dev libsystemd-dev valgrind libwebsocketpp-dev
+    && apt-get install -y libsystemd-dev valgrind libwebsocketpp-dev libcurl4-openssl-dev
 
 # install ndn-cxx
 RUN git clone https://github.com/named-data/ndn-cxx.git /usr/src/app/ndn-cxx \
@@ -49,17 +49,11 @@ RUN git clone --recursive https://github.com/named-data/NFD.git /usr/src/app/NFD
     && ./waf install \
     && cd ..
 
-# install name-based-access-control
-RUN git clone --recursive https://github.com/named-data/name-based-access-control.git /usr/src/app/name-based-access-control \
-    && cd /usr/src/app/name-based-access-control \
-    && ./waf configure --with-examples \
-    && ./waf \
-    && ./waf install \
-    && cd ..
 
 # install ndn-tools
 RUN git clone https://github.com/named-data/ndn-tools.git /usr/src/app/ndn-tools \
     && cd /usr/src/app/ndn-tools \
+    && cp -rp /usr/src/app/src/conf.py /usr/src/app/ndn-tools/manpages/conf.py \
     && ./waf configure \
     && ./waf \
     && ./waf install \
