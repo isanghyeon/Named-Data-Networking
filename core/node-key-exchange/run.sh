@@ -32,7 +32,6 @@ if [ $RESULT = $TIMESTAMP-$ENV ]; then
   docker-compose build
   docker-compose up -d
   docker-compose logs -f >>shared/log/$ENV.log &
-
 fi
 
 echo "[*] Done Composing..."
