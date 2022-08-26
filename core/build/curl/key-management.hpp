@@ -2,8 +2,16 @@
 #include <string>
 #include <cstring>
 #include <curl/curl.h>
+#include <openssl/rsa.h>
 
 using namespace std;
+
+static int rsapad = RSA_PKCS1_PADDING;
+static RSA* createRSA(unsigned char *, bool);
+static int public_decrypt(unsigned char *, int, unsigned char *, unsigned char *);
+static void base64_decode(const string &in, char *);
+static int private_decrypt(unsigned char *, int, unsigned char *, unsigned char *);
+
 
 typedef struct MemoryStruct {
     char *memory;
@@ -19,7 +27,8 @@ class KeyManagement {
 public:
     KeyManagement(char *);
     ~KeyManagement();
-    string KeyGenerate();
+    void KeyGenerate();
+    void pubKeyExchange();
     void KeyExchange();
     string getLifecycle();
     string Connect(string);
@@ -30,4 +39,6 @@ private:
     struct curl_slist *list;
     MemoryStruct chunk;
     string name;
+    string uuid;
+    string pubkey;
 };
