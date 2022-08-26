@@ -68,4 +68,4 @@ async def root():
 
 # if __name__ == '__main__':
 #     application = createApplication()
-#     uvicorn.run(app="main:application", host="127.0.0.1", port=8000, reload=True)
+#     uvicorn.run(app="main:application", host="0.0.0.0", port=8000, reload=True)

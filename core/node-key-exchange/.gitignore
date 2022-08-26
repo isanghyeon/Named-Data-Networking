@@ -1,7 +1,8 @@
 
-../build/key/src/venv
-.idea/
-__pycache__/
-unittest
-*.http
 .DS_Store
+.idea/
+tests/*
+**/backup
+**/__pycache__/
+*.pyc
+shared/log/*.log

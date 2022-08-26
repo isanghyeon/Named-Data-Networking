@@ -4,8 +4,7 @@ services: # key-exchange container
   api:
     image: cpd9957/named-data-networking:2022.08-key
     ports:
-      - "20100:6363/tcp"
-      - "20100:6363/udp"
+      - "20100:20100/tcp"
     networks:
       - node_network
 
