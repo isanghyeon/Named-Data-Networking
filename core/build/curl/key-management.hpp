@@ -1,4 +1,3 @@
-//z
 #include <iostream>
 #include <string>
 #include <cstring>
