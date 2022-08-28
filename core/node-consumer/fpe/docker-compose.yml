@@ -3,79 +3,37 @@ version: '3'
 services: # consumer container
   node1:
     image: cpd9957/named-data-networking:2022.08-fpe
-    environment:
-      - ""
     ports:
       - "20200:6363/tcp" # ndn 1
       - "20200:6363/udp"
       - "20201:6363/tcp" # ndn 2
       - "20201:6363/udp"
       - "20202:8080/tcp" # ndn http
-    working_dir: /usr/src/app
-    volumes:
-      - ""
     networks:
       - node_network
 
   node2: 
     image: cpd9957/named-data-networking:2022.08-fpe
-    environment:
-      - ""
     ports:
       - "20204:6363/tcp" # ndn 1
       - "20204:6363/udp"
       - "20205:6363/tcp" # ndn 2
       - "20205:6363/udp"
       - "20206:8080/tcp" # ndn http
-    working_dir: /usr/src/app
-    volumes:
-      - ""
     networks:
       - node_network
 
-  node3: 
-    image: cpd9957/named-data-networking:2022.08-fpe
-    environment:
-      - ""
-    ports:
-      - "20208:6363/tcp" # ndn 1
-      - "20208:6363/udp"
-      - "20209:6363/tcp" # ndn 2
-      - "20209:6363/udp"
-      - "20210:8080/tcp" # ndn http
-    working_dir: /usr/src/app
-    volumes:
-      - ""
-    networks:
-      - node_network
-
-  node4: 
-    image: cpd9957/named-data-networking:2022.08-fpe
-    environment:
-      - ""
-    ports:
-      - "20212:6363/tcp" # ndn 1
-      - "20212:6363/udp"
-      - "20213:6363/tcp" # ndn 2
-      - "20213:6363/udp"
-      - "20214:8080/tcp" # ndn http
-    working_dir: /usr/src/app
-    volumes:
-      - ""
-    networks:
-      - node_network
-
-  node_mgnt:
-    image: python3.8-buster
-    environment:
-      - ""
-    ports:
-      - "20220:20020"
-    working_dir: /usr/src/app
-    volumes:
-      - ""
-    networks:
-      - node_network
+#  node_mgnt:
+#    image: python3.8-buster
+#    environment:
+#      - ""
+#    ports:
+#      - "20220:20020"
+#    working_dir: /usr/src/app
+#    volumes:
+#      - ""
+#    networks:
+#      - node_network
 
 networks:
   node_network:
