@@ -32,6 +32,10 @@ public:
     void KeyExchange();
     string getLifecycle();
     string Connect(string);
+    string getFPEkey();
+    string getFPEtweak();
+    string getSessKey();
+    string getPubkey();
 
 private:
     CURL *curl;
@@ -41,4 +45,7 @@ private:
     string name;
     string uuid;
     string pubkey;
+    string fpekey;
+    string fpetweak;
+    string sesskey;
 };
