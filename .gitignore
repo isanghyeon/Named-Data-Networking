@@ -6,4 +6,5 @@ tests/*
 **/__pycache__/
 *.pyc
 *.log
-*.log
+CMakeLists.txt
+cmake-build-debug/
