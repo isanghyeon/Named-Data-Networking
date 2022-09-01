@@ -8,3 +8,5 @@ tests/*
 *.log
 CMakeLists.txt
 cmake-build-debug/
+main.cpp
+**.backup.**
