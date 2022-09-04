@@ -16,7 +16,7 @@ async def appGenerator(Authorization: str | None = Header(default=None)):
     """
     try:
         if Authorization is None:
-            raise Exception("Name is null")
+            raise Exception("authentication header is required, but header is null.")
 
         await generator().publicKey(name=Authorization)
         await generator().fpeKey(name=Authorization)
