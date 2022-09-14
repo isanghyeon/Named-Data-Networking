@@ -1,9 +1,9 @@
 #!/bin/bash
 
-source ./build.sh
+source build.sh
 
-source ./.env
-source ./setting.sh
+source .env
+source setting.sh
 
 echo "Environment :: " "$ENV"
 echo "Path        :: " "$Path"
