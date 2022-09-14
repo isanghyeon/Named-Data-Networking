@@ -2,9 +2,9 @@
 
 source .env
 
-echo "[*] Environment :: " "$ENV"
-echo "[*] Path        :: " "$Path"
-echo "[*] Build       :: " "$TIMESTAMP-$ENV"
+echo "[*] Environment :: " $ENV
+echo "[*] Path        :: " $Path
+echo "[*] Build       :: " $TIMESTAMP-$ENV
 
 sleep 3
 

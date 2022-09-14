@@ -2,7 +2,9 @@ version: '3'
 
 services: # key-exchange container
   api:
-    image: cpd9957/named-data-networking:2022.08-key
+    env_file:
+      - .env
+    image: cpd9957/named-data-networking:${TIMESTAMP}-${ENV}
     ports:
       - "20100:20100/tcp"
     networks:

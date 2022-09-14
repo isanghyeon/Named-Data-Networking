@@ -6,10 +6,17 @@
 
 using namespace std;
 
-static int rsapad = RSA_PKCS1_PADDING;ㅇㅐ찯
-static RSA* createRSA(unsigned char *, bool);
+static int rsapad = RSA_PKCS1_PADDING;
+ㅇㅐ찯
+static RSA
+*
+
+createRSA(unsigned char *, bool);
+
 static int public_decrypt(unsigned char *, int, unsigned char *, unsigned char *);
+
 static void base64_decode(const string &in, char *);
+
 static int private_decrypt(unsigned char *, int, unsigned char *, unsigned char *);
 
 
@@ -20,17 +27,23 @@ typedef struct MemoryStruct {
 
 static size_t
 WriteMemoryCallback(void *, size_t, size_t, void *);
-    
+
 static string sha256(const string);
 
 class KeyManagement {
 public:
     KeyManagement(char *);
+
     ~KeyManagement();
+
     void KeyGenerate();
+
     void pubKeyExchange();
+
     void KeyExchange();
+
     string getLifecycle();
+
     string Connect(string);
 
 private:
