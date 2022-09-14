@@ -4,7 +4,7 @@ services: # key-exchange container
   api:
     env_file:
       - .env
-    image: cpd9957/named-data-networking:${TIMESTAMP}-${ENV}
+    image: ${IMAGE}:${TIMESTAMP}-${ENV}
     ports:
       - "20100:20100/tcp"
     networks:

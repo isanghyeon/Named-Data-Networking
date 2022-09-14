@@ -12,9 +12,9 @@ docker-compose stop
 docker-compose down
 docker-compose rm -f
 
-docker rmi $Image:$TIMESTAMP-$ENV
+docker rmi $IMAGE:$TIMESTAMP-$ENV
 
-docker build -t $Image:$TIMESTAMP-$ENV $Path
+docker build -t $IMAGE:$TIMESTAMP-$ENV $Path
 
 if [ $? -eq 1 ]; then
   echo "[-] Docker image build failed..."

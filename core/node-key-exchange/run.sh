@@ -12,14 +12,14 @@ echo "[*] Build       :: " $TIMESTAMP-$ENV
 
 sleep 3
 
-RESULT=$(docker images | grep $Image | awk '{print $2}' | grep $TIMESTAMP-$ENV)
+RESULT=$(docker images | grep $IMAGE | awk '{print $2}' | grep $TIMESTAMP-$ENV)
 
 if [ $RESULT != $TIMESTAMP-$ENV ]; then
-  echo "[-] Not Found Image"
+  echo "[-] Not Found IMAGE"
 fi
 
 if [ $RESULT = $TIMESTAMP-$ENV ]; then
-  echo "[+] Image import completed..."
+  echo "[+] IMAGE import completed..."
 
   sleep 3
 
