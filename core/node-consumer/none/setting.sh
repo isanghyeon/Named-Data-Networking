@@ -1,4 +1,4 @@
 mkdir -p shared
-mkdir -p shared/src
-
-chmod 777 -R shared
+mkdir -p shared/src/node1
+mkdir -p shared/src/node2
+mkdir -p shared/log

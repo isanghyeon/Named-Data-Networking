@@ -6,7 +6,7 @@
 
 using namespace std;
 
-static int rsapad = RSA_PKCS1_PADDING;
+static int rsapad = RSA_PKCS1_PADDING;ㅇㅐ찯
 static RSA* createRSA(unsigned char *, bool);
 static int public_decrypt(unsigned char *, int, unsigned char *, unsigned char *);
 static void base64_decode(const string &in, char *);

@@ -31,6 +31,9 @@
 
 #include <stdio.h>
 #include <string.h>
+
+#include "ndn-cxx/security/transform/curl/key-mangement.hpp"
+
 #include <iostream>
 #include <string>
 #include <openssl/conf.h>
@@ -125,6 +128,7 @@ namespace ndn {
         }
 
         if (check == 0) {
+
             while (iComponentStart < uri.size()) {
                 size_t iComponentEnd = uri.find('/', iComponentStart);
                 if (iComponentEnd == std::string::npos)
