@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/zsh
 
 source ./.env
 
@@ -9,7 +9,7 @@ check="N"
 
 sleep 3
 
-apt-get install -y docker-compose
+# apt-get install -y docker-compose
 
 sleep 3
 
@@ -19,11 +19,12 @@ docker-compose rm -f
 
 sleep 3
 
-read -p "Delete legacy environment or docker image? [y/N] " check
+echo -n "Delete legacy environment or docker image? [y/N] "
+read check
 
 sleep 3
 
-if [ ${check^^} == "Y" ]; then
+if [ ${check:u} = "Y" ]; then
     docker rmi $Image:$TIMESTAMP-$ENV
     docker build -t $Image:$TIMESTAMP-$ENV $Path
 
@@ -32,9 +33,9 @@ if [ ${check^^} == "Y" ]; then
     else
         echo "[+] Docker image build completed..."
     fi
+else
+    echo "[+] Docker image build completed..."
 fi
-
-echo "[+] Docker image build completed..."
 
 sleep 3
 

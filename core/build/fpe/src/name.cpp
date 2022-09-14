@@ -71,10 +71,6 @@ namespace ndn {
         if (uri.empty())
             return;
 
-//        std::cout << "uri :: ";
-//        std::cout << uri;
-//        std::cout << std::endl; // ndn:/localhost/nfd
-
         size_t iColon = uri.find(':');
         if (iColon != std::string::npos) {
             // Make sure the colon came before a '/'.
@@ -100,15 +96,10 @@ namespace ndn {
                 uri.erase(0, 1);
             }
         }
-//        std::cout << "uri trim :: ";
-//        std::cout << uri;
-//        std::cout << std::endl;
 
         std::string test[] = {"localhost", "ndn", "nfd", "status", "faces", "create", "update", "destroy", "list",
                               "channels", "query", "events", "fib", "add-nexthop", "remove-nexthop", "cs", "config",
                               "erase", "info", "strategy-choice", "set", "unset", "rib", "register", "unregister"};
-//        tc[4]6://
-//        udp[4]6://
 
         size_t iComponentStart = 0;
         char key[33] = "2DE79D232DF5585D68CE47882AE256D6";
@@ -121,10 +112,10 @@ namespace ndn {
         char pt[100];
         char ct[100];
         std::string comparison = uri.substr(iComponentStart, uri.find('/', iComponentStart) - iComponentStart);
+
         // Unescape the components.
         for (auto cmp: test) {
             if (comparison.compare(cmp) == 0) {
-                // std::cout << comparison << " " << cmp << " " << uri << std::endl;
                 check = 1;
                 break;
             } else {
@@ -133,6 +124,7 @@ namespace ndn {
         }
 
         if (check == 0) {
+
             while (iComponentStart < uri.size()) {
                 size_t iComponentEnd = uri.find('/', iComponentStart);
                 if (iComponentEnd == std::string::npos)
@@ -141,14 +133,7 @@ namespace ndn {
                 memset(pt, 0, 100);
                 memset(ct, 0, 100);
                 strcpy(pt, uri.substr(iComponentStart, iComponentEnd - iComponentStart).c_str());
-                // printf(" %s\n", pt);
                 FPE_ff3_encrypt(pt, ct, ff3);
-
-//                std::cout << "uri enc :: ";
-//                std::cout << pt;
-//                std::cout << "\n";
-//                std::cout << ct;
-//                std::cout << std::endl;
 
                 append(Component::fromEscapedString(ct));
                 iComponentStart = iComponentEnd + 1;

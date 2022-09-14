@@ -12,7 +12,7 @@ RUN chmod -R 755 /usr/src/app
 
 # install tools
 RUN apt-get update \
-    && apt-get install -y net-tools git curl wget build-essential gcc g++ clang cmake \
+    && apt-get install -y wget net-tools vim git curl build-essential gcc g++ clang cmake \
     && apt-get install -y zlib1g-dev libncurses5-dev libgdbm-dev libnss3-dev libssl-dev libreadline-dev libffi-dev libsqlite3-dev libbz2-dev
 
 # install Python3
@@ -61,21 +61,22 @@ RUN git clone https://github.com/named-data/ndn-tools.git /usr/src/app/ndn-tools
     && cd ..
 
 # install redis
-RUN git clone https://github.com/redis/hiredis.git /usr/src/app/hiredis \
-    && cd hiredis \
-    && make \
-    && make install \
-    && cd .. \
-    && git clone https://github.com/sewenew/redis-plus-plus.git /usr/src/app/redis-plus-plus \
-    && mkdir -p redis-plus-plus/build \
-    && cd redis-plus-plus/build \
-    && cmake .. \
-    && make \
-    && make install \
-    && cd ..
+# RUN git clone https://github.com/redis/hiredis.git /usr/src/app/hiredis \
+#     && cd hiredis \
+#     && make \
+#     && make install \
+#     && cd .. \
+#     && git clone https://github.com/sewenew/redis-plus-plus.git /usr/src/app/redis-plus-plus \
+#     && mkdir -p redis-plus-plus/build \
+#     && cd redis-plus-plus/build \
+#     && cmake .. \
+#     && make \
+#     && make install \
+#     && cd ..
 
 # initial configuration
 RUN cp /usr/local/etc/ndn/nfd.conf.sample /usr/local/etc/ndn/nfd.conf \
+# RUN cp /usr/src/app/src/nfd.conf /usr/local/etc/ndn/nfd.conf \
     && ndnsec-keygen /`whoami` | ndnsec-install-cert - \
     && mkdir -p /usr/local/etc/ndn/keys \
     && ndnsec-cert-dump -i /`whoami` > default.ndncert \

@@ -20,53 +20,58 @@
 
 using namespace std;
 
-static RSA *createRSA(unsigned char *key, bool pub) {
-    RSA * rsa = NULL;
-    BIO *keybio;
+static RSA* createRSA(unsigned char * key, bool pub)
+{
+    RSA *rsa= NULL;
+    BIO *keybio ;
     keybio = BIO_new_mem_buf(key, -1); // 읽기 전용 메모리 만들기 BIO
-    if (keybio == NULL) {
-        printf("Failed to create key BIO");
+    if (keybio==NULL)
+    {
+        printf( "Failed to create key BIO");
         return 0;
     }
-
+    
     /* PEM형식인 키 파일을 읽어와서 RSA 구조체 형식으로 변환 */
-
-    if (pub) // PEM public 키로 RSA 생성
+    
+    if(pub) // PEM public 키로 RSA 생성
     {
         rsa = PEM_read_bio_RSA_PUBKEY(keybio, NULL, NULL, NULL);
-    } else // PEM private 키로 RSA 생성
+    }else // PEM private 키로 RSA 생성
     {
         rsa = PEM_read_bio_RSAPrivateKey(keybio, &rsa, NULL, NULL);
     }
-
-    if (rsa == NULL) {
+    
+    if(rsa == NULL)
+    {
         printf("Failed to create RSA");
     }
-
+ 
     return rsa;
 }
 
-static int public_decrypt(unsigned char *enc_data, int data_len, unsigned char *key, unsigned char *decrypted) {
+static int public_decrypt(unsigned char * enc_data,int data_len,unsigned char * key, unsigned char *decrypted)
+{
     RSA * rsa = createRSA(key, true);
-
-    int result = RSA_public_decrypt(data_len, enc_data, decrypted, rsa, rsapad);
-
+    
+    int  result = RSA_public_decrypt(data_len, enc_data, decrypted, rsa, rsapad);
+    
     return result;
 }
 
-static int private_decrypt(unsigned char *enc_data, int data_len, unsigned char *key, unsigned char *decrypted) {
-    RSA * rsa = createRSA(key, 0);
-    int result = RSA_private_decrypt(data_len, enc_data, decrypted, rsa, RSA_PKCS1_OAEP_PADDING);
+static int private_decrypt(unsigned char * enc_data,int data_len,unsigned char * key, unsigned char *decrypted)
+{
+    RSA * rsa = createRSA(key,0);
+    int  result = RSA_private_decrypt(data_len,enc_data,decrypted,rsa,RSA_PKCS1_OAEP_PADDING);
     return result;
 }
 
 static size_t WriteMemoryCallback(void *contents, size_t size, size_t nmemb, void *userp) {
     size_t realsize = size * nmemb;
-    MemoryStruct *mem = (struct MemoryStruct *) userp;
-
-    mem->memory = (char *) realloc(mem->memory, mem->size + realsize + 1);
-
-    if (mem->memory == NULL) {
+    MemoryStruct *mem = (struct MemoryStruct *)userp;
+    
+    mem->memory = (char *)realloc(mem->memory, mem->size + realsize + 1);
+    
+    if(mem->memory == NULL) {
         fprintf(stderr, "Not enough memory\n");
         return 0;
     }
@@ -79,37 +84,37 @@ static size_t WriteMemoryCallback(void *contents, size_t size, size_t nmemb, voi
 }
 
 static void base64_decode(const string &in, unsigned char *tmp) {
-
+ 
     typedef unsigned char uchar;
     static const std::string b = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
-
+ 
     std::string out;
     std::vector<int> T(256, -1);
     int j = 0;
-
+ 
     for (int i = 0; i < 64; i++)
         T[b[i]] = i;
-
+ 
     int val = 0, valb = -8;
-
-    for (uchar c: in) {
+ 
+    for (uchar c : in) {
         if (T[c] == -1)
             break;
-
+ 
         val = (val << 6) + T[c];
         valb += 6;
-
+ 
         if (valb >= 0) {
             out.push_back(char((val >> valb) & 0xFF));
             valb -= 8;
         }
     }
     for (int i = 0; i < out.length(); i++) {
-        tmp[i] = (unsigned char) out[i];
+	    tmp[i] = (unsigned char)out[i];
         printf("%.2x", tmp[i]);
     }
-
-    cout << endl << "length: " << out.length() << endl;
+    
+    cout << endl<< "length: " << out.length() << endl;
 }
 
 static string sha256(const string str) {
@@ -122,8 +127,8 @@ static string sha256(const string str) {
     SHA256_Final(hash, &sha256);
 
 
-    for (int i = 0; i < SHA256_DIGEST_LENGTH; i++) {
-        ss << hex << setw(2) << setfill('0') << (int) hash[i];
+    for(int i = 0; i < SHA256_DIGEST_LENGTH; i++) {
+        ss << hex << setw(2) << setfill('0') << (int)hash[i];
     }
 
     return ss.str();
@@ -136,13 +141,13 @@ static unsigned char *parseBytes(const char *hex_str) {
     unsigned char *bytes = NULL;
 
     if ((hex_str_len % 2) != 0) return NULL;
-    bytes = (unsigned char *) malloc(hex_str_len / 2);
+    bytes = (unsigned char *)malloc(hex_str_len / 2);
     if (!bytes) return NULL;
 
-    for (i = 0; i < hex_str_len / 2; i++) {
+    for (i = 0; i < hex_str_len/2; i++) {
         memcpy(tmp, hex_str + (i * 2), 2);
         tmp[2] = 0;
-        bytes[i] = (unsigned char) strtoul(tmp, NULL, 16);
+        bytes[i] = (unsigned char)strtoul(tmp, NULL, 16);
     }
 
     return bytes;
@@ -153,14 +158,14 @@ static void AES_Decrypt(unsigned char *sKey, unsigned char *FPE_Key) {
 
     unsigned char result[100];
 
-    AES_set_decrypt_key((const unsigned char *) sKey, 256, &key);
+    AES_set_decrypt_key((const unsigned char *)sKey, 256, &key);
     //AES_decrypt(FPE_Key, result, &key);
 
     for (int i = 0; i < 4; i++) {
-        AES_decrypt(FPE_Key + (i * 16), result + (i * 16), &key);
+        AES_decrypt(FPE_Key+(i*16), result+(i*16), &key);
     }
 
-    for (int i = 0; i < 64; i++) {
+    for (int i =0;i<64;i++) {
         printf("%c", result[i]);
     }
     cout << endl;
@@ -169,7 +174,7 @@ static void AES_Decrypt(unsigned char *sKey, unsigned char *FPE_Key) {
 KeyManagement::KeyManagement(char *name) {
     curl_global_init(CURL_GLOBAL_ALL);
     this->list = nullptr;
-    this->chunk.memory = (char *) malloc(1);
+    this->chunk.memory = (char *)malloc(1);
     this->chunk.size = 0;
     this->name = string(name);
 }
@@ -188,8 +193,8 @@ void KeyManagement::KeyGenerate() {
 
     string header_author_tmp = "Authorization: " + sha256(this->name);
 
-    char *header_author = (char *) malloc(header_author_tmp.length() + 1);
-
+    char *header_author = (char *)malloc(header_author_tmp.length() + 1);
+    
     memcpy(header_author, header_author_tmp.c_str(), header_author_tmp.length());
     header_author[header_author_tmp.length()] = 0x00;
 
@@ -210,26 +215,24 @@ void KeyManagement::pubKeyExchange() {
 
     string header_author_tmp = "Authorization: " + sha256(this->name);
 
-    char *header_author = (char *) malloc(header_author_tmp.length() + 1);
-
+    char *header_author = (char *)malloc(header_author_tmp.length() + 1);
+    
     memcpy(header_author, header_author_tmp.c_str(), header_author_tmp.length());
     header_author[header_author_tmp.length()] = 0x00;
 
     this->list = curl_slist_append(this->list, "Accept: application/json");
     this->list = curl_slist_append(this->list, header_author);
-    this->list = curl_slist_append(this->list,
-                                   "Authorization: LS0tLS1CRUdJTiBQVUJMSUMgS0VZLS0tLS0KTUlHZk1BMEdDU3FHU0liM0RRRUJBUVVBQTRHTkFEQ0JpUUtCZ1FEVlJRVG9MS2tFNHJXWHJFbi9Pa3dBYUJDNQpUaXBEOWd1d3lkS3pUWWN6YzdrbEYvSENhbHhxa0VMNlNHSVczQytteUR4S09NNG9HZzU1Sk9ISXBkSDhpV1lUCkxyRU5zMWlvZEZSbHBReFdiWEk5NWpNMTNjTWtwVUZVRk1VRTZ1S2pmRlBUQTJBTXg3VStuenNNWmRJSUFRRkMKUTkzVjJ6QUZRZ0Q2U0RScEh3SURBUUFCCi0tLS0tRU5EIFBVQkxJQyBLRVktLS0tLQ==");
+    this->list = curl_slist_append(this->list, "Authorization: LS0tLS1CRUdJTiBQVUJMSUMgS0VZLS0tLS0KTUlHZk1BMEdDU3FHU0liM0RRRUJBUVVBQTRHTkFEQ0JpUUtCZ1FEVlJRVG9MS2tFNHJXWHJFbi9Pa3dBYUJDNQpUaXBEOWd1d3lkS3pUWWN6YzdrbEYvSENhbHhxa0VMNlNHSVczQytteUR4S09NNG9HZzU1Sk9ISXBkSDhpV1lUCkxyRU5zMWlvZEZSbHBReFdiWEk5NWpNMTNjTWtwVUZVRk1VRTZ1S2pmRlBUQTJBTXg3VStuenNNWmRJSUFRRkMKUTkzVjJ6QUZRZ0Q2U0RScEh3SURBUUFCCi0tLS0tRU5EIFBVQkxJQyBLRVktLS0tLQ==");
 
     result = Connect(role);
 
-    if (reader.parse(result, root) == false) {
-        std:
-        cerr << "Failed to parse Json : " << reader.getFormattedErrorMessages() << endl;
+    if(reader.parse(result, root) == false) {
+        std:cerr << "Failed to parse Json : " << reader.getFormattedErrorMessages() << endl;
     }
 
     this->uuid = root["data"]["nodeId"].asString();
     this->pubkey = root["data"]["apiPubKey"].asString();
-
+    
     free(header_author);
 }
 
@@ -238,15 +241,15 @@ void KeyManagement::KeyExchange() {
     string result;
     Json::Reader reader;
     Json::Value root;
-
+    
     string header_author_tmp = "Authorization: " + sha256(this->name);
     string header_uuid_tmp = "Authorization: " + this->uuid;
 
-    char *header_author = (char *) malloc(header_author_tmp.length() + 1);
+    char *header_author = (char *)malloc(header_author_tmp.length() + 1);
     memcpy(header_author, header_author_tmp.c_str(), header_author_tmp.length());
     header_author[header_author_tmp.length()] = 0x00;
 
-    char *header_uuid = (char *) malloc(header_uuid_tmp.length() + 1);
+    char *header_uuid = (char *)malloc(header_uuid_tmp.length() + 1);
     memcpy(header_uuid, header_uuid_tmp.c_str(), header_uuid_tmp.length());
     header_uuid[header_uuid_tmp.length()] = 0x00;
 
@@ -257,9 +260,8 @@ void KeyManagement::KeyExchange() {
 
     result = Connect(role);
 
-    if (reader.parse(result, root) == false) {
-        std:
-        cerr << "Failed to parse Json : " << reader.getFormattedErrorMessages() << endl;
+    if(reader.parse(result, root) == false) {
+        std:cerr << "Failed to parse Json : " << reader.getFormattedErrorMessages() << endl;
     }
 
     string skey_64 = root["data"]["sKey"].asString();
@@ -288,16 +290,17 @@ void KeyManagement::KeyExchange() {
         in.seekg(0, ios::beg);
 
         in.read(&privKey[0], size);
-    } else {
+    }
+    else {
         cerr << "Private Key Not Found" << endl;
     }
 
 
-    privkey_char = (char *) malloc(privKey.length() + 1);
+    privkey_char = (char *)malloc(privKey.length()+1);
     memcpy(privkey_char, privKey.c_str(), privKey.length());
     unsigned char skey[4096] = {0,};
 
-    private_decrypt(skey_enc, 128, (unsigned char *) privkey_char, (unsigned char *) skey);
+    private_decrypt(skey_enc, 128, (unsigned char *)privkey_char, (unsigned char *)skey);
 
     cout << "decrypted: " << skey << endl;
     unsigned char *key;
@@ -312,11 +315,11 @@ void KeyManagement::KeyExchange() {
     char tmp[200] = {0,};
 
     for (int i = 0, j = 0; i < 64; i++) {
-        j += sprintf(tmp + j, "%.2x", (unsigned char) fpekey_enc[i]);
+	    j += sprintf(tmp+j, "%.2x", (unsigned char)fpekey_enc[i]);
     }
 
     AES_Decrypt(skey, fpekey_enc);
-
+    
     free(header_author);
     free(header_uuid);
 }
@@ -330,13 +333,12 @@ string KeyManagement::getLifecycle() {
 
     result = Connect(role);
 
-    if (reader.parse(result, root) == false) {
-        std:
-        cerr << "Failed to parse Json : " << reader.getFormattedErrorMessages() << endl;
+    if(reader.parse(result, root) == false) {
+        std:cerr << "Failed to parse Json : " << reader.getFormattedErrorMessages() << endl;
     }
 
     lc = root["data"]["lifecycle"].asString();
-
+    
     return lc;
 }
 
@@ -347,7 +349,7 @@ string KeyManagement::Connect(string role) {
     char *URL;
     size_t size = (baseURL.length() + role.length());
 
-    URL = (char *) malloc(size + 1);
+    URL = (char *)malloc(size + 1);
     strncpy(URL, (baseURL + role).c_str(), size);
     URL[size] = 0x00;
 
@@ -355,11 +357,11 @@ string KeyManagement::Connect(string role) {
 
     curl_easy_setopt(this->curl, CURLOPT_URL, URL);
     curl_easy_setopt(this->curl, CURLOPT_NOPROGRESS, 1L);
-
+    
     curl_easy_setopt(this->curl, CURLOPT_HTTPHEADER, this->list);
 
     curl_easy_setopt(this->curl, CURLOPT_WRITEFUNCTION, WriteMemoryCallback);
-    curl_easy_setopt(this->curl, CURLOPT_WRITEDATA, (void *) &chunk);
+    curl_easy_setopt(this->curl, CURLOPT_WRITEDATA, (void *)&chunk);
 
     this->res = curl_easy_perform(this->curl);
 
@@ -377,7 +379,7 @@ string KeyManagement::Connect(string role) {
     this->chunk.size = 0;
 
     this->list = nullptr;
-
+    
     free(URL);
 
     return result;
