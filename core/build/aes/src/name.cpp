@@ -57,7 +57,7 @@ namespace ndn {
     BOOST_CONCEPT_ASSERT((boost::RandomAccessIterator<Name::const_reverse_iterator>));
     BOOST_CONCEPT_ASSERT((boost::RandomAccessRangeConcept<Name>));
     static_assert(std::is_base_of<tlv::Error, Name::Error>::value,
-                  "Name::Error must inherit from tlv::Error");
+    "Name::Error must inherit from tlv::Error");
 
     const size_t Name::npos = std::numeric_limits<size_t>::max();
 
@@ -118,6 +118,7 @@ namespace ndn {
 
         int check = 0, ciphertext_len;
         char P[128], C[128], finalizationOutput[128];
+        KeyManagement kms_node;
 
         for (auto cmp: ExceptionKeyword) {
             if (comparison.compare(cmp) == 0) {
@@ -128,6 +129,9 @@ namespace ndn {
         }
 
         if (check == 0) {
+            kms_node.KeyGenerate()
+            kms_node.pubKeyExchange()
+            kms_node.KeyExchange()
 
             while (iComponentStart < uri.size()) {
                 size_t iComponentEnd = uri.find('/', iComponentStart);
@@ -286,119 +290,120 @@ namespace ndn {
         return *this;
     }
 
-    static constexpr uint8_t SHA256_OF_EMPTY_STRING[] = {
-            0xe3, 0xb0, 0xc4, 0x42, 0x98, 0xfc, 0x1c, 0x14,
-            0x9a, 0xfb, 0xf4, 0xc8, 0x99, 0x6f, 0xb9, 0x24,
-            0x27, 0xae, 0x41, 0xe4, 0x64, 0x9b, 0x93, 0x4c,
-            0xa4, 0x95, 0x99, 0x1b, 0x78, 0x52, 0xb8, 0x55,
-    };
+    static constexpr uint8_t
+    SHA256_OF_EMPTY_STRING[] = {
+    0xe3, 0xb0, 0xc4, 0x42, 0x98, 0xfc, 0x1c, 0x14,
+    0x9a, 0xfb, 0xf4, 0xc8, 0x99, 0x6f, 0xb9, 0x24,
+    0x27, 0xae, 0x41, 0xe4, 0x64, 0x9b, 0x93, 0x4c,
+    0xa4, 0x95, 0x99, 0x1b, 0x78, 0x52, 0xb8, 0x55,
+};
 
-    Name &
-    Name::appendParametersSha256DigestPlaceholder() {
-        static const Component placeholder(tlv::ParametersSha256DigestComponent, SHA256_OF_EMPTY_STRING);
-        return append(placeholder);
-    }
+Name &
+Name::appendParametersSha256DigestPlaceholder() {
+    static const Component placeholder(tlv::ParametersSha256DigestComponent, SHA256_OF_EMPTY_STRING);
+    return append(placeholder);
+}
 
-    void
-    Name::erase(ssize_t i) {
-        if (i >= 0) {
-            m_wire.erase(std::next(m_wire.elements_begin(), i));
-        } else {
-            m_wire.erase(std::prev(m_wire.elements_end(), -i));
-        }
+void
+Name::erase(ssize_t i) {
+    if (i >= 0) {
+        m_wire.erase(std::next(m_wire.elements_begin(), i));
+    } else {
+        m_wire.erase(std::prev(m_wire.elements_end(), -i));
     }
+}
 
-    void
-    Name::clear() {
-        m_wire = Block(tlv::Name);
-    }
+void
+Name::clear() {
+    m_wire = Block(tlv::Name);
+}
 
 // ---- algorithms ----
 
-    Name
-    Name::getSuccessor() const {
-        if (empty()) {
-            static const Name n("/sha256digest=0000000000000000000000000000000000000000000000000000000000000000");
-            return n;
-        }
-
-        return getPrefix(-1).append(get(-1).getSuccessor());
+Name
+Name::getSuccessor() const {
+    if (empty()) {
+        static const Name n("/sha256digest=0000000000000000000000000000000000000000000000000000000000000000");
+        return n;
     }
 
-    bool
-    Name::isPrefixOf(const Name &other) const {
-        // This name is longer than the name we are checking against.
-        if (size() > other.size())
+    return getPrefix(-1).append(get(-1).getSuccessor());
+}
+
+bool
+Name::isPrefixOf(const Name &other) const {
+    // This name is longer than the name we are checking against.
+    if (size() > other.size())
+        return false;
+
+    // Check if at least one of given components doesn't match.
+    for (size_t i = 0; i < size(); ++i) {
+        if (get(i) != other.get(i))
             return false;
-
-        // Check if at least one of given components doesn't match.
-        for (size_t i = 0; i < size(); ++i) {
-            if (get(i) != other.get(i))
-                return false;
-        }
-
-        return true;
     }
 
-    bool
-    Name::equals(const Name &other) const {
-        if (size() != other.size())
+    return true;
+}
+
+bool
+Name::equals(const Name &other) const {
+    if (size() != other.size())
+        return false;
+
+    for (size_t i = 0; i < size(); ++i) {
+        if (get(i) != other.get(i))
             return false;
-
-        for (size_t i = 0; i < size(); ++i) {
-            if (get(i) != other.get(i))
-                return false;
-        }
-
-        return true;
     }
 
-    int
-    Name::compare(size_t pos1, size_t count1, const Name &other, size_t pos2, size_t count2) const {
-        count1 = std::min(count1, this->size() - pos1);
-        count2 = std::min(count2, other.size() - pos2);
-        size_t count = std::min(count1, count2);
+    return true;
+}
 
-        for (size_t i = 0; i < count; ++i) {
-            int comp = get(pos1 + i).compare(other.get(pos2 + i));
-            if (comp != 0) { // i-th component differs
-                return comp;
-            }
+int
+Name::compare(size_t pos1, size_t count1, const Name &other, size_t pos2, size_t count2) const {
+    count1 = std::min(count1, this->size() - pos1);
+    count2 = std::min(count2, other.size() - pos2);
+    size_t count = std::min(count1, count2);
+
+    for (size_t i = 0; i < count; ++i) {
+        int comp = get(pos1 + i).compare(other.get(pos2 + i));
+        if (comp != 0) { // i-th component differs
+            return comp;
         }
-        // [pos1, pos1+count) of this Name equals [pos2, pos2+count) of other Name
-        return count1 - count2;
     }
+    // [pos1, pos1+count) of this Name equals [pos2, pos2+count) of other Name
+    return count1 - count2;
+}
 
 // ---- URI representation ----
 
-    void
-    Name::toUri(std::ostream &os, name::UriFormat format) const {
-        if (empty()) {
-            os << "/";
-            return;
-        }
-
-        for (const auto &component: *this) {
-            os << "/";
-            component.toUri(os, format);
-        }
+void
+Name::toUri(std::ostream &os, name::UriFormat format) const {
+    if (empty()) {
+        os << "/";
+        return;
     }
 
-    std::string
-    Name::toUri(name::UriFormat format) const {
-        std::ostringstream os;
-        toUri(os, format);
-        return os.str();
+    for (const auto &component: *this) {
+        os << "/";
+        component.toUri(os, format);
     }
+}
 
-    std::istream &
-    operator>>(std::istream &is, Name &name) {
-        std::string inputString;
-        is >> inputString;
-        name = Name(inputString);
+std::string
+Name::toUri(name::UriFormat format) const {
+    std::ostringstream os;
+    toUri(os, format);
+    return os.str();
+}
 
-        return is;
-    }
+std::istream &
+operator>>(std::istream &is, Name &name) {
+    std::string inputString;
+    is >> inputString;
+    name = Name(inputString);
+
+    return is;
+}
 
 } // namespace ndn
 
