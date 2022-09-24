@@ -21,7 +21,7 @@
 using namespace std;
 
 static RSA *createRSA(unsigned char *key, bool pub) {
-    RSA * rsa = NULL;
+    RSA *rsa = NULL;
     BIO *keybio;
     keybio = BIO_new_mem_buf(key, -1); // 읽기 전용 메모리 만들기 BIO
     if (keybio == NULL) {
@@ -47,7 +47,7 @@ static RSA *createRSA(unsigned char *key, bool pub) {
 }
 
 static int public_decrypt(unsigned char *enc_data, int data_len, unsigned char *key, unsigned char *decrypted) {
-    RSA * rsa = createRSA(key, true);
+    RSA *rsa = createRSA(key, true);
 
     int result = RSA_public_decrypt(data_len, enc_data, decrypted, rsa, rsapad);
 
@@ -55,7 +55,7 @@ static int public_decrypt(unsigned char *enc_data, int data_len, unsigned char *
 }
 
 static int private_decrypt(unsigned char *enc_data, int data_len, unsigned char *key, unsigned char *decrypted) {
-    RSA * rsa = createRSA(key, 0);
+    RSA *rsa = createRSA(key, 0);
     int result = RSA_private_decrypt(data_len, enc_data, decrypted, rsa, RSA_PKCS1_OAEP_PADDING);
     return result;
 }
@@ -106,10 +106,7 @@ static void base64_decode(const string &in, unsigned char *tmp) {
     }
     for (int i = 0; i < out.length(); i++) {
         tmp[i] = (unsigned char) out[i];
-        printf("%.2x", tmp[i]);
     }
-
-    cout << endl << "length: " << out.length() << endl;
 }
 
 static string sha256(const string str) {
@@ -148,22 +145,15 @@ static unsigned char *parseBytes(const char *hex_str) {
     return bytes;
 }
 
-static void AES_Decrypt(unsigned char *sKey, unsigned char *FPE_Key) {
+static void AES_Decrypt(unsigned char *sKey, unsigned char *FPE_Key, char *out, int byte) {
     AES_KEY key;
-
-    unsigned char result[100];
 
     AES_set_decrypt_key((const unsigned char *) sKey, 256, &key);
     //AES_decrypt(FPE_Key, result, &key);
 
-    for (int i = 0; i < 4; i++) {
-        AES_decrypt(FPE_Key + (i * 16), result + (i * 16), &key);
+    for (int i = 0; i < byte / 16; i++) {
+        AES_decrypt(FPE_Key + (i * 16), (unsigned char *) out + (i * 16), &key);
     }
-
-    for (int i = 0; i < 64; i++) {
-        printf("%c", result[i]);
-    }
-    cout << endl;
 }
 
 KeyManagement::KeyManagement(char *name) {
@@ -264,6 +254,7 @@ void KeyManagement::KeyExchange() {
 
     string skey_64 = root["data"]["sKey"].asString();
     string fpekey_64 = root["data"]["fpeKey"].asString();
+    string fpetweak_64 = root["data"]["fpeTweak"].asString();
 
     char *privkey_char;
 
@@ -274,6 +265,10 @@ void KeyManagement::KeyExchange() {
     unsigned char fpekey_enc[4096];
 
     base64_decode(fpekey_64, fpekey_enc);
+
+    unsigned char fpetweak_enc[4096];
+
+    base64_decode(fpetweak_64, fpetweak_enc);
 
     ifstream in("./private_key.pem");
     string privKey;
@@ -299,23 +294,15 @@ void KeyManagement::KeyExchange() {
 
     private_decrypt(skey_enc, 128, (unsigned char *) privkey_char, (unsigned char *) skey);
 
-    cout << "decrypted: " << skey << endl;
-    unsigned char *key;
+    char fpekey[100];
+    char fpetweak[100];
 
-    //key = parseBytes(skey);
-    /*
-    for (int i = 0; i < 16; i++) {
-        printf("%.2x", key[i]);
-    }
+    AES_Decrypt(skey, fpekey_enc, fpekey, 64);
+    AES_Decrypt(skey, fpetweak_enc, fpetweak, 32);
 
-    cout << endl;*/
-    char tmp[200] = {0,};
-
-    for (int i = 0, j = 0; i < 64; i++) {
-        j += sprintf(tmp + j, "%.2x", (unsigned char) fpekey_enc[i]);
-    }
-
-    AES_Decrypt(skey, fpekey_enc);
+    this->fpekey = string(fpekey);
+    this->fpetweak = string(fpetweak);
+    this->sesskey = string((char *) skey);
 
     free(header_author);
     free(header_uuid);
@@ -363,15 +350,12 @@ string KeyManagement::Connect(string role) {
 
     this->res = curl_easy_perform(this->curl);
 
-    cout << this->res << endl;
-
     if (this->res != CURLE_OK) {
         cerr << "Failed to connect KDC Server" << endl;
         exit(1);
     }
 
     result = string(this->chunk.memory);
-    cout << result << endl;
 
     free(this->chunk.memory);
     this->chunk.size = 0;
@@ -381,4 +365,20 @@ string KeyManagement::Connect(string role) {
     free(URL);
 
     return result;
+}
+
+string KeyManagement::getFPEkey() {
+    return this->fpekey;
+}
+
+string KeyManagement::getFPEtweak() {
+    return this->fpetweak;
+}
+
+string KeyManagement::getSessKey() {
+    return this->sesskey;
+}
+
+string KeyManagement::getPubkey() {
+    return this->pubkey;
 }
