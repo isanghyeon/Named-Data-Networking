@@ -11,10 +11,6 @@ COPY . /usr/src/app
 RUN chmod -R 755 /usr/src/app
 
 # install tools
-RUN  apt-get update \
-     && apt-get install -y net-tools git curl wget build-essential
-
-# install tools
 RUN apt-get update \
     && apt-get install -y wget net-tools vim git curl build-essential gcc g++ clang cmake \
     && apt-get install -y zlib1g-dev libncurses5-dev libgdbm-dev libnss3-dev libssl-dev libreadline-dev libffi-dev libsqlite3-dev libbz2-dev
@@ -34,8 +30,13 @@ RUN apt-get install -y pkg-config libboost-all-dev python3-sphinx \
 
 # install ndn-cxx
 RUN git clone https://github.com/named-data/ndn-cxx.git /usr/src/app/ndn-cxx \
+    && mkdir -p /usr/src/app/ndn-cxx/ndn-cxx/security/transform/curl \
+    && cp -rp /usr/src/app/src/curl /usr/src/app/ndn-cxx/ndn-cxx/security/transform/curl \
+    && cp -rp /usr/src/app/src/aes-cipher.* /usr/src/app/ndn-cxx/ndn-cxx/security/transform \
+    && cp -rp /usr/src/app/src/name.* /usr/src/app/ndn-cxx/ndn-cxx \
+    && cp -rp /usr/src/app/src/wscript /usr/src/app/ndn-cxx \
     && cd /usr/src/app/ndn-cxx \
-    && ./waf configure --with-tests \
+    && ./waf configure \
     && ./waf \
     && ./waf install \
     && ldconfig \
@@ -49,13 +50,6 @@ RUN git clone --recursive https://github.com/named-data/NFD.git /usr/src/app/NFD
     && ./waf install \
     && cd ..
 
-# install name-based-access-control
-# RUN git clone --recursive https://github.com/named-data/name-based-access-control.git /usr/src/app/name-based-access-control \
-#     && cd /usr/src/app/name-based-access-control \
-#     && ./waf configure --with-examples \
-#     && ./waf \
-#     && ./waf install \
-#     && cd ..
 
 # install ndn-tools
 RUN git clone https://github.com/named-data/ndn-tools.git /usr/src/app/ndn-tools \
@@ -68,6 +62,7 @@ RUN git clone https://github.com/named-data/ndn-tools.git /usr/src/app/ndn-tools
 
 # initial configuration
 RUN cp /usr/local/etc/ndn/nfd.conf.sample /usr/local/etc/ndn/nfd.conf \
+# RUN cp /usr/src/app/src/nfd.conf /usr/local/etc/ndn/nfd.conf \
     && ndnsec-keygen /`whoami` | ndnsec-install-cert - \
     && mkdir -p /usr/local/etc/ndn/keys \
     && ndnsec-cert-dump -i /`whoami` > default.ndncert \
@@ -81,5 +76,7 @@ EXPOSE 6363/udp
 
 ENV CONFIG=/usr/local/etc/ndn/nfd.conf
 ENV LOG_FILE=/logs/nfd.log
+
+RUN echo "============== NDN Daemon Start ================="
 
 CMD /usr/local/bin/nfd -c $CONFIG > $LOG_FILE 2>&1
