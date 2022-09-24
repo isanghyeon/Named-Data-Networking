@@ -33,7 +33,7 @@ RUN git clone https://github.com/named-data/ndn-cxx.git /usr/src/app/ndn-cxx \
     && mkdir -p /usr/src/app/ndn-cxx/ndn-cxx/security/transform/curl \
     && cp -rp /usr/src/app/src/curl /usr/src/app/ndn-cxx/ndn-cxx/security/transform/curl \
     && cp -rp /usr/src/app/src/fpe-cipher.* /usr/src/app/ndn-cxx/ndn-cxx/security/transform \
-    && cp -rp /usr/src/app/src/name.cpp /usr/src/app/ndn-cxx/ndn-cxx \
+    && cp -rp /usr/src/app/src/name.* /usr/src/app/ndn-cxx/ndn-cxx \
     && cp -rp /usr/src/app/src/wscript /usr/src/app/ndn-cxx \
     && cd /usr/src/app/ndn-cxx \
     && ./waf configure \
