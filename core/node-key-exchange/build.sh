@@ -1,10 +1,8 @@
 #!/bin/bash
 
-source .env
+source ./.env
 
-echo "[*] Environment :: " $ENV
-echo "[*] Path        :: " $Path
-echo "[*] Build       :: " $TIMESTAMP-$ENV
+check="N"
 
 sleep 3
 
@@ -12,14 +10,24 @@ docker-compose stop
 docker-compose down
 docker-compose rm -f
 
-docker rmi $IMAGE:$TIMESTAMP-$ENV
+sleep 3
 
-docker build -t $IMAGE:$TIMESTAMP-$ENV $Path
+echo -n "Delete legacy environment or docker image? [y/N] "
+read check
 
-if [ $? -eq 1 ]; then
-  echo "[-] Docker image build failed..."
+sleep 3
+
+if [ ${check^^} = "Y" ]; then
+    docker rmi $IMAGES:$TIMESTAMP-$ENV
+    docker build -t $IMAGES:$TIMESTAMP-$ENV $Path
+
+    if [ $? -eq 1 ]; then
+        echo "[-] Docker image build failed..."
+    else
+        echo "[+] Docker image build completed..."
+    fi
 else
-  echo "[+] Docker image build completed..."
+    echo "[+] Docker image build completed..."
 fi
 
 sleep 3

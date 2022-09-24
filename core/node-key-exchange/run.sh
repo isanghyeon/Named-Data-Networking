@@ -1,25 +1,26 @@
 #!/bin/bash
 
-source build.sh
+source ./.env
+source ./setting.sh
 
-source .env
-source setting.sh
+echo "[*] Running Time  :: " "$(date +%Y-%m-%dT%H:%M:%SZ)"
+echo "[*] Environment   :: " $ENV
+echo "[*] Path          :: " $Path
+echo "[*] Build         :: " $TIMESTAMP-$ENV
 
-echo "[*] Running Time  :: " date +%Y-%m-%dT%H:%M:%SZ
-echo "[*] Environment :: " $ENV
-echo "[*] Path        :: " $Path
-echo "[*] Build       :: " $TIMESTAMP-$ENV
+source ./build.sh
 
+echo "[*] build done"
 sleep 3
 
-RESULT=$(docker images | grep $IMAGE | awk '{print $2}' | grep $TIMESTAMP-$ENV)
+RESULT=$(docker images | grep $IMAGES | awk '{print $2}' | grep $TIMESTAMP-$ENV)
 
-if [ $RESULT != $TIMESTAMP-$ENV ]; then
-  echo "[-] Not Found IMAGE"
+if [ -z $RESULT -o $RESULT != $TIMESTAMP-$ENV ]; then
+  echo "[-] Not Found Image"
 fi
 
 if [ $RESULT = $TIMESTAMP-$ENV ]; then
-  echo "[+] IMAGE import completed..."
+  echo "[+] Image import completed..."
 
   sleep 3
 
