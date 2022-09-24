@@ -328,7 +328,7 @@ string KeyManagement::getLifecycle() {
 }
 
 string KeyManagement::Connect(string role) {
-    string baseURL = "192.168.0.67:20100/";
+    string baseURL = "192.168.0.161:20101/";
     string result;
 
     char *URL;
