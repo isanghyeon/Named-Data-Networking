@@ -17,7 +17,7 @@ RUN apt-get install -y pkg-config libboost-all-dev libssl-dev \
 
 # source copy
 COPY ./src /usr/src/app
-RUN chmod -R 777 /usr/src/app/src
+RUN chmod -R 777 /usr/src/app
 
 # install Python v3.9.12
 RUN mkdir -p /usr/src/app/tmp
