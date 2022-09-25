@@ -4,8 +4,6 @@ source ./.env
 
 check="N"
 
-sleep 3
-
 apt-get install -y docker-compose
 
 sleep 3

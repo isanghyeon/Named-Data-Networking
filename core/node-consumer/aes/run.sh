@@ -1,7 +1,5 @@
 #!/bin/bash
 
-source ./build.sh
-
 source ./.env
 source ./setting.sh
 
@@ -9,6 +7,8 @@ echo "[*] TimeStamp   :: " "$(date +%Y.%m.%dT%H:%M:%SZ)"
 echo "[*] Environment :: " $ENV
 echo "[*] Path        :: " $Path
 echo "[*] Build       :: " $TIMESTAMP-$ENV
+
+source ./build.sh
 
 sleep 3
 
