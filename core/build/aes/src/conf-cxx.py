@@ -29,7 +29,7 @@ today_fmt = '%Y-%m-%d'
 # -- General configuration ---------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
 
-needs_sphinx = '1.3'
+needs_sphinx = '1.8.17'
 extensions = [
     'sphinx.ext.extlinks',
     'sphinx.ext.todo',
