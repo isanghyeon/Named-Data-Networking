@@ -21,9 +21,9 @@ RUN chmod -R 777 /usr/src/app
 
 # install Python v3.9.12
 RUN mkdir -p /usr/src/app/tmp
-COPY Automated-Python3.9 /usr/src/app/tmp
+COPY Automated-Python3.9.sh /usr/src/app/tmp
 RUN chmod -R 777 /usr/src/app/tmp \
-    && /usr/src/app/tmp/Automated-Python3.9
+    && /usr/src/app/tmp/Automated-Python3.9.sh
 
 
 # install ndn-cxx
