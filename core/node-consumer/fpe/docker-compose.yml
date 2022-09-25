@@ -23,18 +23,6 @@ services: # consumer container
     networks:
       - node_network
 
-#  node_mgnt:
-#    image: python3.8-buster
-#    environment:
-#      - ""
-#    ports:
-#      - "20220:20020"
-#    working_dir: /usr/src/app
-#    volumes:
-#      - ""
-#    networks:
-#      - node_network
-
 networks:
   node_network:
     driver: bridge

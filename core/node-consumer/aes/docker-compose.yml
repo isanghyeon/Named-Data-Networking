@@ -2,9 +2,9 @@ version: '3'
 
 services: # consumer container
   node1:
-    image: cpd9957/named-data-networking:2022.08-aes
-    environment:
-      - ""
+    env_file:
+      - .env
+    image: ${IMAGES}:${TIMESTAMP}-${ENV}
     ports:
       - "20100:6363/tcp" # ndn 1
       - "20100:6363/udp"
@@ -12,15 +12,13 @@ services: # consumer container
       - "20101:6363/udp"
       - "20102:8080/tcp" # ndn http
     working_dir: /usr/src/app
-    volumes:
-      - ""
     networks:
       - node_network
 
-  node2: 
-    image: cpd9957/named-data-networking:2022.08-aes
-    environment:
-      - ""
+  node2:
+    env_file:
+      - .env
+    image: ${IMAGES}:${TIMESTAMP}-${ENV}
     ports:
       - "20104:6363/tcp" # ndn 1
       - "20104:6363/udp"
@@ -28,52 +26,6 @@ services: # consumer container
       - "20105:6363/udp"
       - "20106:8080/tcp" # ndn http
     working_dir: /usr/src/app
-    volumes:
-      - ""
-    networks:
-      - node_network
-
-  node3: 
-    image: cpd9957/named-data-networking:2022.08-aes
-    environment:
-      - ""
-    ports:
-      - "20108:6363/tcp" # ndn 1
-      - "20108:6363/udp"
-      - "20109:6363/tcp" # ndn 2
-      - "20109:6363/udp"
-      - "20110:8080/tcp" # ndn http
-    working_dir: /usr/src/app
-    volumes:
-      - ""
-    networks:
-      - node_network
-
-  node4: 
-    image: cpd9957/named-data-networking:2022.08-aes
-    environment:
-      - ""
-    ports:
-      - "20112:6363/tcp" # ndn 1
-      - "20112:6363/udp"
-      - "20113:6363/tcp" # ndn 2
-      - "20113:6363/udp"
-      - "20114:8080/tcp" # ndn http
-    working_dir: /usr/src/app
-    volumes:
-      - ""
-    networks:
-      - node_network
-
-  node_mgnt:
-    image: python3.8-buster
-    environment:
-      - ""
-    ports:
-      - "20120:20020"
-    working_dir: /usr/src/app
-    volumes:
-      - ""
     networks:
       - node_network
 
