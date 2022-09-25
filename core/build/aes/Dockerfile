@@ -35,6 +35,7 @@ RUN git clone https://github.com/named-data/ndn-cxx.git /usr/src/app/ndn-cxx \
     && cp -rp /usr/src/app/src/aes-cipher.* /usr/src/app/ndn-cxx/ndn-cxx/security/transform \
     && cp -rp /usr/src/app/src/name.* /usr/src/app/ndn-cxx/ndn-cxx \
     && cp -rp /usr/src/app/src/wscript /usr/src/app/ndn-cxx \
+    && cp -rp /usr/src/app/src/conf-nxx.py /usr/src/app/ndn-cxx/docs/conf.py \
     && cd /usr/src/app/ndn-cxx \
     && ./waf configure \
     && ./waf \
@@ -52,7 +53,7 @@ RUN git clone --recursive https://github.com/named-data/NFD.git /usr/src/app/NFD
 
 # install ndn-tools
 RUN git clone https://github.com/named-data/ndn-tools.git /usr/src/app/ndn-tools \
-    && cp -rp /usr/src/app/src/conf.py /usr/src/app/ndn-tools/manpages/conf.py \
+    && cp -rp /usr/src/app/src/conf-tools.py /usr/src/app/ndn-tools/manpages/conf.py \
     && cd /usr/src/app/ndn-tools \
     && ./waf configure \
     && ./waf \
