@@ -32,7 +32,7 @@
 #include <stdio.h>
 #include <string.h>
 
-#include "ndn-cxx/security/transform/curl/key-mangement.hpp"
+#include "ndn-cxx/security/transform/curl/curl/key-mangement.hpp"s
 
 #include <iostream>
 #include <string>

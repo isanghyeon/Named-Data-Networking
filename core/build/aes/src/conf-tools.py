@@ -26,7 +26,7 @@ master_doc = 'index'
 # -- General configuration ---------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
 
-needs_sphinx = '1.8.17'
+needs_sphinx = '4.0'
 extensions = []
 
 templates_path = ['_templates']
