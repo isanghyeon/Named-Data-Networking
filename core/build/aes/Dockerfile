@@ -16,7 +16,7 @@ RUN apt-get install -y pkg-config libboost-all-dev libssl-dev \
     && apt-get install -y libpcap-dev libsystemd-dev valgrind libwebsocketpp-dev
 
 # source copy
-COPY ./src /usr/src/app
+COPY . /usr/src/app
 RUN chmod -R 777 /usr/src/app
 
 # install Python3
