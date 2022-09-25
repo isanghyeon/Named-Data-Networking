@@ -32,7 +32,7 @@
 #include <stdio.h>
 #include <string.h>
 
-#include "ndn-cxx/security/transform/curl/curl/key-mangement.hpp"s
+#include "ndn-cxx/security/transform/curl/curl/key-mangement.hpp"
 
 #include <iostream>
 #include <string>
@@ -77,9 +77,7 @@ namespace ndn {
     }
 
     Name::Name(std::string uri) {
-        KeyManagement
-        k(uri)
-        l;
+        KeyManagement k(uri);
 
         if (uri.empty())
             return;
