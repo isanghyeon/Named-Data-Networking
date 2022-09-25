@@ -18,7 +18,7 @@ if [ -z $RESULT -o $RESULT != $TIMESTAMP-$ENV ]; then
   echo "[-] Not Found Image"
 fi
 
-if [ $RESULT = $TIMESTAMP-$ENV ]; then
+if [ $RESULT == $TIMESTAMP-$ENV ]; then
   echo "[+] Image import completed..."
 
   sleep 3
