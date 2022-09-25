@@ -25,7 +25,7 @@ author = 'Named Data Networking Project'
 # Else, today_fmt is used as the format for a strftime call.
 today_fmt = '%Y-%m-%d'
 
-
+master_doc = 'index'
 # -- General configuration ---------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
 
