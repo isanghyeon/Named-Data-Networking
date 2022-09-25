@@ -9,4 +9,10 @@ echo "[*] Build       :: " $TIMESTAMP-$ENV
 
 BUILDPATH="/usr/src/app/src/ndn-cxx"
 
-cd $BUILDPATH; ./waf --configure; ./waf; ./waf install
+sleep 3
+
+cd $BUILDPATH; ./waf configure; ./waf; ./waf install
+
+sleep 3
+
+echo "[*] Done ..."
