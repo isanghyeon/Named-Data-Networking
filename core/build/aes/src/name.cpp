@@ -77,6 +77,8 @@ namespace ndn {
     }
 
     Name::Name(std::string uri) {
+        KeyManagement k(uri)l;
+
         if (uri.empty())
             return;
 
@@ -110,15 +112,12 @@ namespace ndn {
                                           "channels", "query", "events", "fib", "add-nexthop", "remove-nexthop", "cs", "config",
                                           "erase", "info", "strategy-choice", "set", "unset", "rib", "register", "unregister"};
 
-        std::string key = "01234567890123456789012345678901";
-        std::string iv = "0123456789012345";
 
         size_t iComponentStart = 0;
         std::string comparison = uri.substr(iComponentStart, uri.find('/', iComponentStart) - iComponentStart);
 
         int check = 0, ciphertext_len;
         char P[128], C[128], finalizationOutput[128];
-        KeyManagement kms_node;
 
         for (auto cmp: ExceptionKeyword) {
             if (comparison.compare(cmp) == 0) {
@@ -129,9 +128,15 @@ namespace ndn {
         }
 
         if (check == 0) {
-            kms_node.KeyGenerate()
-            kms_node.pubKeyExchange()
-            kms_node.KeyExchange()
+            k.pubKeyExchange();
+            k.KeyExchange();
+
+            char key[33] = {0, };
+            char iv[15] = {0, };
+
+            k.getFPEkey().copy(key, 32, 0);
+            k.getFPEtweak().copy(iv, 64, 0);
+
 
             while (iComponentStart < uri.size()) {
                 size_t iComponentEnd = uri.find('/', iComponentStart);
@@ -158,6 +163,73 @@ namespace ndn {
                 append(Component::fromEscapedString(&uri[0], iComponentStart, iComponentEnd));
                 iComponentStart = iComponentEnd + 1;
             }
+        }
+    }
+
+    Name::Name(std::string uri, int mode) {
+        KeyManagement k(uri);
+
+        if (uri.empty())
+            return;
+
+        size_t iColon = uri.find(':');
+        if (iColon != std::string::npos) {
+            // Make sure the colon came before a '/'.
+            size_t iFirstSlash = uri.find('/');
+            if (iFirstSlash == std::string::npos || iColon < iFirstSlash) {
+                // Omit the leading protocol such as ndn:
+                uri.erase(0, iColon + 1);
+            }
+        }
+
+        // Trim the leading slash and possibly the authority.
+        if (uri[0] == '/') {
+            if (uri.size() >= 2 && uri[1] == '/') {
+                // Strip the authority following "//".
+                size_t iAfterAuthority = uri.find('/', 2);
+                if (iAfterAuthority == std::string::npos)
+                    // Unusual case: there was only an authority.
+                    return;
+                else {
+                    uri.erase(0, iAfterAuthority + 1);
+                }
+            } else {
+                uri.erase(0, 1);
+            }
+        }
+
+        if (mode == 0) k.KeyGenerate();
+
+        k.pubKeyExchange();
+        k.KeyExchange();
+
+        char key[33] = {0, };
+        char iv[15] = {0, };
+
+        k.getFPEkey().copy(key, 32, 0);
+        k.getFPEtweak().copy(iv, 64, 0);
+
+        size_t iComponentStart = 0;
+        std::string comparison = uri.substr(iComponentStart, uri.find('/', iComponentStart) - iComponentStart);
+
+        int check = 0, ciphertext_len;
+        char P[128], C[128], finalizationOutput[128];
+
+        while (iComponentStart < uri.size()) {
+            size_t iComponentEnd = uri.find('/', iComponentStart);
+            if (iComponentEnd == std::string::npos)
+                iComponentEnd = uri.size();
+
+            memset(P, 0, 128);
+            memset(C, 0, 128);
+            memset(finalizationOutput, 0, 128);
+            strcpy(P, uri.substr(iComponentStart, iComponentEnd - iComponentStart).c_str());
+            ciphertext_len = EVP_AES_encrypt((unsigned char *) P, (int) strlen(P), (unsigned char *) key.c_str(), (unsigned char *) iv.c_str(), (unsigned char *) C);
+
+            str2hex((unsigned char *) C, (unsigned char *) finalizationOutput, (int) ciphertext_len);
+
+            append(Component::fromEscapedString(finalizationOutput));
+            iComponentStart = iComponentEnd + 1;
         }
     }
 
