@@ -28,11 +28,10 @@
 #include "ndn-cxx/encoding/encoding-buffer.hpp"
 #include "ndn-cxx/util/time.hpp"
 #include "ndn-cxx/security/transform/aes-cipher.hpp"
+#include "ndn-cxx/security/transform/curl/key-management.hpp"
 
 #include <stdio.h>
 #include <string.h>
-
-#include "ndn-cxx/security/transform/curl/curl/key-mangement.hpp"
 
 #include <iostream>
 #include <string>
