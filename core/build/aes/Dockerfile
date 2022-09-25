@@ -30,8 +30,8 @@ RUN mkdir -p /usr/src/app/python@3 \
 # install ndn-cxx
 RUN git clone https://github.com/named-data/ndn-cxx.git /usr/src/app/ndn-cxx \
     && mkdir -p /usr/src/app/ndn-cxx/ndn-cxx/security/transform/curl \
-    && cp -rp /usr/src/app/src/curl/* /usr/src/app/ndn-cxx/ndn-cxx/security/transform/curl/curl \
-    && cp -rp /usr/src/app/src/key/* /usr/src/app/ndn-cxx/ndn-cxx/security/transform/curl/curl \
+    && cp -rp /usr/src/app/src/curl/* /usr/src/app/ndn-cxx/ndn-cxx/security/transform/curl \
+    && cp -rp /usr/src/app/src/key/* /usr/src/app/ndn-cxx/ndn-cxx/security/transform/curl \
     && cp -rp /usr/src/app/src/aes-cipher.* /usr/src/app/ndn-cxx/ndn-cxx/security/transform \
     && cp -rp /usr/src/app/src/name.* /usr/src/app/ndn-cxx/ndn-cxx \
     && cp -rp /usr/src/app/src/wscript /usr/src/app/ndn-cxx \
@@ -52,6 +52,7 @@ RUN git clone --recursive https://github.com/named-data/NFD.git /usr/src/app/NFD
 
 # install ndn-tools
 RUN git clone https://github.com/named-data/ndn-tools.git /usr/src/app/ndn-tools \
+    && cp -rp /usr/src/app/src/conf.py /usr/src/app/ndn-tools/manpages/conf.py \
     && cd /usr/src/app/ndn-tools \
     && ./waf configure \
     && ./waf \

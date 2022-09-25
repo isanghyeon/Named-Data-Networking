@@ -19,7 +19,7 @@ read check
 
 sleep 3
 
-if [ ${check^^} == "Y" ]; then
+if [ "${check^^}" == "Y" ]; then
     docker rmi $IMAGES:$TIMESTAMP-$ENV
     docker build -t $IMAGES:$TIMESTAMP-$ENV $Path
 
