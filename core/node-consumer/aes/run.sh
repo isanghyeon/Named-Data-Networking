@@ -14,7 +14,7 @@ sleep 3
 
 RESULT=$(docker images | grep $IMAGES | awk '{print $2}' | grep $TIMESTAMP-$ENV)
 
-if [ -z $RESULT -o "$RESULT" != "$TIMESTAMP-$ENV" ]; then
+if [ -z "$RESULT" -o "$RESULT" != "$TIMESTAMP-$ENV" ]; then
   echo "[-] Not Found Image"
 fi
 
