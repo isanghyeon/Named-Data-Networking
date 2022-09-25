@@ -45,6 +45,7 @@ RUN git clone https://github.com/named-data/ndn-cxx.git /usr/src/app/ndn-cxx \
 
 # install NFD
 RUN git clone --recursive https://github.com/named-data/NFD.git /usr/src/app/NFD \
+    && cp -rp /usr/src/app/src/conf-nfd.py /usr/src/app/NFD/docs/conf.py \
     && cd /usr/src/app/NFD \
     && ./waf configure \
     && ./waf \
