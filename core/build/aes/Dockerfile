@@ -13,7 +13,7 @@ RUN  apt-get update \
 # install ndn-cxx and NFD dependencies
 RUN apt-get install -y pkg-config libboost-all-dev libssl-dev \
     && apt-get install -y doxygen graphviz python3-pip python3-sphinx software-properties-common libsqlite3-dev libboost-all-dev libpcap-dev \
-    && apt-get install -y libpcap-dev libsystemd-dev valgrind libwebsocketpp-dev
+    && apt-get install -y libpcap-dev libsystemd-dev valgrind libwebsocketpp-dev libcurl4-openssl-dev
 
 # source copy
 COPY . /usr/src/app
