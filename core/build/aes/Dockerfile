@@ -35,7 +35,7 @@ RUN git clone https://github.com/named-data/ndn-cxx.git /usr/src/app/ndn-cxx \
     && cp -rp /usr/src/app/src/key/* /usr/src/app/ndn-cxx/ndn-cxx/security/transform/curl \
     && cp -rp /usr/src/app/src/aes-cipher.* /usr/src/app/ndn-cxx/ndn-cxx/security/transform \
     && cp -rp /usr/src/app/src/name.* /usr/src/app/ndn-cxx/ndn-cxx \
-    && cp -rp /usr/src/app/src/wscript-cxx /usr/src/app/ndn-cxx \
+    && cp -rp /usr/src/app/src/wscript /usr/src/app/ndn-cxx \
     && cp -rp /usr/src/app/src/conf-cxx.py /usr/src/app/ndn-cxx/docs/conf.py \
     && cd /usr/src/app/ndn-cxx \
     && ./waf configure \
@@ -47,7 +47,6 @@ RUN git clone https://github.com/named-data/ndn-cxx.git /usr/src/app/ndn-cxx \
 # install NFD
 RUN git clone --recursive https://github.com/named-data/NFD.git /usr/src/app/NFD \
     && cp -rp /usr/src/app/src/conf-nfd.py /usr/src/app/NFD/docs/conf.py \
-    && cp -rp /usr/src/app/src/wscript-nfd /usr/src/app/NFD \
     && cd /usr/src/app/NFD \
     && ./waf configure \
     && ./waf \
