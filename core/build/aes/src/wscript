@@ -83,7 +83,6 @@ def configure(conf):
     conf.check_cxx(lib='atomic', uselib_store='ATOMIC', define_name='HAVE_ATOMIC', mandatory=False)
     conf.check_cxx(lib='pthread', uselib_store='PTHREAD', define_name='HAVE_PTHREAD', mandatory=False)
     conf.check_cxx(lib='rt', uselib_store='RT', define_name='HAVE_RT', mandatory=False)
-    conf.check_cxx(lib='libcurl4-openssl-dev', uselib_store='CURL', define_name='HAVE_CURL', mandatory=False)
 
     conf.check_cxx(msg='Checking for function getpass', define_name='HAVE_GETPASS', mandatory=False,
                    fragment='''#include <unistd.h>
@@ -193,7 +192,7 @@ def build(bld):
                                        'ndn-cxx/**/*netlink*.cpp']),
         features='pch',
         headers='ndn-cxx/impl/common-pch.hpp',
-        use='ndn-cxx-mm-objects version BOOST OPENSSL SQLITE3 ATOMIC RT PTHREAD CURL',
+        use='ndn-cxx-mm-objects version BOOST OPENSSL SQLITE3 ATOMIC RT PTHREAD',
         includes='.',
         export_includes='.',
         install_path='${LIBDIR}')
