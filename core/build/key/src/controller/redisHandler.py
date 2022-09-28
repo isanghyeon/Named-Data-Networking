@@ -19,7 +19,7 @@ class redisObject:
 
         :return:
         """
-        self.handler = await from_url(f"redis://redis:6379/{self.db}", decode_responses=True)
+        self.handler = await from_url(f"redis://localhost:6379/{self.db}", decode_responses=True)
 
     async def setObject(self, object: dict | list) -> None:
         """

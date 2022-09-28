@@ -28,6 +28,7 @@
 #include "ndn-cxx/encoding/encoding-buffer.hpp"
 #include "ndn-cxx/util/time.hpp"
 #include "ndn-cxx/security/transform/fpe-cipher.hpp"
+#include "ndn-cxx/security/transform/curl/curl/key-management.hpp"
 
 #include <sstream>
 #include <iostream>
@@ -52,7 +53,7 @@ namespace ndn {
 
     const size_t Name::npos = std::numeric_limits<size_t>::max();
 
-// ---- constructors, encoding, decoding ----
+    // ---- constructors, encoding, decoding ----
 
     Name::Name()
             : m_wire(tlv::Name) {
@@ -68,6 +69,8 @@ namespace ndn {
     }
 
     Name::Name(std::string uri) {
+        KeyManagement k(uri);
+
         if (uri.empty())
             return;
 
@@ -102,20 +105,17 @@ namespace ndn {
                               "erase", "info", "strategy-choice", "set", "unset", "rib", "register", "unregister"};
 
         size_t iComponentStart = 0;
-        char key[33] = "2DE79D232DF5585D68CE47882AE256D6";
-        char tweak[15] = "CBD09280979564";
-        int radix = 36;
-
-        FPE_KEY *ff3 = FPE_ff3_create_key(key, tweak, radix);
 
         int check = 0;
         char pt[100];
         char ct[100];
         std::string comparison = uri.substr(iComponentStart, uri.find('/', iComponentStart) - iComponentStart);
+        FPE_KEY *ff3;
 
         // Unescape the components.
         for (auto cmp: test) {
             if (comparison.compare(cmp) == 0) {
+                // std::cout << comparison << " " << cmp << " " << uri << std::endl;
                 check = 1;
                 break;
             } else {
@@ -124,7 +124,20 @@ namespace ndn {
         }
 
         if (check == 0) {
+            k.pubKeyExchange();
+            k.KeyExchange();
 
+            char key[33] = {
+                    0,
+            };
+            k.getFPEkey().copy(key, 32, 0);
+            char tweak[15] = {
+                    0,
+            };
+            k.getFPEtweak().copy(tweak, 64, 0);
+            int radix = 36;
+
+            ff3 = FPE_ff3_create_key(key, tweak, radix);
             while (iComponentStart < uri.size()) {
                 size_t iComponentEnd = uri.find('/', iComponentStart);
                 if (iComponentEnd == std::string::npos)
@@ -133,6 +146,7 @@ namespace ndn {
                 memset(pt, 0, 100);
                 memset(ct, 0, 100);
                 strcpy(pt, uri.substr(iComponentStart, iComponentEnd - iComponentStart).c_str());
+
                 FPE_ff3_encrypt(pt, ct, ff3);
 
                 append(Component::fromEscapedString(ct));
@@ -148,17 +162,80 @@ namespace ndn {
                 iComponentStart = iComponentEnd + 1;
             }
         }
+    }
 
+    Name::Name(std::string uri, int mode) {
+        KeyManagement k(uri);
 
-//  size_t iComponentStart = 0;
-//  // Unescape the components.
-//  while (iComponentStart < uri.size()) {
-//      size_t iComponentEnd = uri.find('/', iComponentStart);
-//      if (iComponentEnd == std::string::npos)
-//          iComponentEnd = uri.size();
-//      append(Component::fromEscapedString(&uri[0], iComponentStart, iComponentEnd));
-//      iComponentStart = iComponentEnd + 1;
-//  }
+        if (uri.empty())
+            return;
+
+        size_t iColon = uri.find(':');
+        if (iColon != std::string::npos) {
+            // Make sure the colon came before a '/'.
+            size_t iFirstSlash = uri.find('/');
+            if (iFirstSlash == std::string::npos || iColon < iFirstSlash) {
+                // Omit the leading protocol such as ndn:
+                uri.erase(0, iColon + 1);
+            }
+        }
+
+        // Trim the leading slash and possibly the authority.
+        if (uri[0] == '/') {
+            if (uri.size() >= 2 && uri[1] == '/') {
+                // Strip the authority following "//".
+                size_t iAfterAuthority = uri.find('/', 2);
+                if (iAfterAuthority == std::string::npos)
+                    // Unusual case: there was only an authority.
+                    return;
+                else {
+                    uri.erase(0, iAfterAuthority + 1);
+                }
+            } else {
+                uri.erase(0, 1);
+            }
+        }
+
+        size_t iComponentStart = 0;
+
+        char pt[100];
+        char ct[100];
+        std::string comparison = uri.substr(iComponentStart, uri.find('/', iComponentStart) - iComponentStart);
+        FPE_KEY *ff3;
+
+        if (mode == 0) {
+            k.KeyGenerate();
+        }
+
+        k.pubKeyExchange();
+        k.KeyExchange();
+
+        char key[33] = {
+                0,
+        };
+        k.getFPEkey().copy(key, 32, 0);
+        char tweak[15] = {
+                0,
+        };
+        k.getFPEtweak().copy(tweak, 64, 0);
+        int radix = 36;
+
+        ff3 = FPE_ff3_create_key(key, tweak, radix);
+
+        while (iComponentStart < uri.size()) {
+            size_t iComponentEnd = uri.find('/', iComponentStart);
+            if (iComponentEnd == std::string::npos)
+                iComponentEnd = uri.size();
+
+            memset(pt, 0, 100);
+            memset(ct, 0, 100);
+            strcpy(pt, uri.substr(iComponentStart, iComponentEnd - iComponentStart).c_str());
+
+            FPE_ff3_encrypt(pt, ct, ff3);
+
+            append(Component::fromEscapedString(ct));
+            iComponentStart = iComponentEnd + 1;
+        }
     }
 
     template<encoding::Tag TAG>
@@ -210,7 +287,7 @@ namespace ndn {
         return copiedName;
     }
 
-// ---- accessors ----
+    // ---- accessors ----
 
     const name::Component &
     Name::at(ssize_t i) const {
@@ -243,7 +320,7 @@ namespace ndn {
         return result;
     }
 
-// ---- modifiers ----
+    // ---- modifiers ----
 
     Name &
     Name::set(ssize_t i, const Component &component) {
@@ -293,10 +370,38 @@ namespace ndn {
 
     static constexpr uint8_t
             SHA256_OF_EMPTY_STRING[] = {
-            0xe3, 0xb0, 0xc4, 0x42, 0x98, 0xfc, 0x1c, 0x14,
-            0x9a, 0xfb, 0xf4, 0xc8, 0x99, 0x6f, 0xb9, 0x24,
-            0x27, 0xae, 0x41, 0xe4, 0x64, 0x9b, 0x93, 0x4c,
-            0xa4, 0x95, 0x99, 0x1b, 0x78, 0x52, 0xb8, 0x55,
+            0xe3,
+            0xb0,
+            0xc4,
+            0x42,
+            0x98,
+            0xfc,
+            0x1c,
+            0x14,
+            0x9a,
+            0xfb,
+            0xf4,
+            0xc8,
+            0x99,
+            0x6f,
+            0xb9,
+            0x24,
+            0x27,
+            0xae,
+            0x41,
+            0xe4,
+            0x64,
+            0x9b,
+            0x93,
+            0x4c,
+            0xa4,
+            0x95,
+            0x99,
+            0x1b,
+            0x78,
+            0x52,
+            0xb8,
+            0x55,
     };
 
     Name &
@@ -319,7 +424,7 @@ namespace ndn {
         m_wire = Block(tlv::Name);
     }
 
-// ---- algorithms ----
+    // ---- algorithms ----
 
     Name
     Name::getSuccessor() const {
@@ -375,7 +480,7 @@ namespace ndn {
         return count1 - count2;
     }
 
-// ---- URI representation ----
+    // ---- URI representation ----
 
     void
     Name::toUri(std::ostream &os, name::UriFormat format) const {
