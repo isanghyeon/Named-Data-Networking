@@ -109,7 +109,7 @@ namespace ndn {
 
         std::string ExceptionKeyword[] = {"localhost", "ndn", "nfd", "status", "faces", "create", "update", "destroy", "list",
                                           "channels", "query", "events", "fib", "add-nexthop", "remove-nexthop", "cs", "config",
-                                          "erase", "info", "strategy-choice", "set", "unset", "rib", "register", "unregister", "root"};
+                                          "erase", "info", "strategy-choice", "set", "unset", "rib", "register", "unregister"};
 
 
         size_t iComponentStart = 0;
