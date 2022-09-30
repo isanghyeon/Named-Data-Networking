@@ -11,4 +11,4 @@ CMakeLists.txt
 cmake-build-debug/
 main.cpp
 **.backup.**
-*.pem
+cd

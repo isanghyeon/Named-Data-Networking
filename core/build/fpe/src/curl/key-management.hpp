@@ -16,8 +16,8 @@ static void base64_decode(const string &in, char *);
 
 static int private_decrypt(unsigned char *, int, unsigned char *, unsigned char *);
 
-
-typedef struct MemoryStruct {
+typedef struct MemoryStruct
+{
     char *memory;
     size_t size;
 } MemoryStruct;
@@ -27,9 +27,12 @@ WriteMemoryCallback(void *, size_t, size_t, void *);
 
 static string sha256(const string);
 
-class KeyManagement {
+class KeyManagement
+{
 public:
     KeyManagement(char *);
+
+    KeyManagement(string);
 
     ~KeyManagement();
 

@@ -34,6 +34,10 @@ RUN apt-get install -y pkg-config libboost-all-dev python3-sphinx \
 
 # install ndn-cxx
 RUN git clone https://github.com/named-data/ndn-cxx.git /usr/src/app/ndn-cxx \
+    && cp -rp /usr/src/app/src/curl /usr/src/app/ndn-cxx/ndn-cxx/security/transform/curl \
+    && cp -rp /usr/src/app/src/aes-cipher.* /usr/src/app/ndn-cxx/ndn-cxx/security/transform \
+    && cp -rp /usr/src/app/src/name.* /usr/src/app/ndn-cxx/ndn-cxx \
+    && cp -rp /usr/src/app/src/wscript /usr/src/app/ndn-cxx \
     && cd /usr/src/app/ndn-cxx \
     && ./waf configure --with-tests \
     && ./waf \
@@ -48,14 +52,6 @@ RUN git clone --recursive https://github.com/named-data/NFD.git /usr/src/app/NFD
     && ./waf \
     && ./waf install \
     && cd ..
-
-# install name-based-access-control
-# RUN git clone --recursive https://github.com/named-data/name-based-access-control.git /usr/src/app/name-based-access-control \
-#     && cd /usr/src/app/name-based-access-control \
-#     && ./waf configure --with-examples \
-#     && ./waf \
-#     && ./waf install \
-#     && cd ..
 
 # install ndn-tools
 RUN git clone https://github.com/named-data/ndn-tools.git /usr/src/app/ndn-tools \

@@ -1,5 +1,6 @@
 import time
 import uuid
+import datetime
 from fastapi import APIRouter, HTTPException, Header, Request
 from starlette.responses import JSONResponse
 from starlette.status import HTTP_200_OK, HTTP_400_BAD_REQUEST
@@ -32,7 +33,7 @@ async def appExchange(Authorization: list[str] | None = Header(default=None)):
             }
         )
     except Exception as e:
-        print("[Exchange] error:: ", e, " - ", datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
+        print("[Exchange] error:: ", e, " - ", datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
 
 
 @app.get("/exchange/pkey")
