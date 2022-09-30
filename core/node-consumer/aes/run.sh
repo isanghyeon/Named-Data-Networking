@@ -1,26 +1,39 @@
 #!/bin/bash
 
+source ./.env
 source ./setting.sh
 
-ENV="aes"
-TIMESTAMP=$(date +%Y.%m)
-PATH="../../build/$ENV"
+echo "[*] TimeStamp   :: " "$(date +%Y.%m.%dT%H:%M:%SZ)"
+echo "[*] Environment :: " $ENV
+echo "[*] Path        :: " $Path
+echo "[*] Build       :: " $TIMESTAMP-$ENV
 
-echo "Environment :: " "$ENV"
-echo "Path        :: " "$PATH"
-echo "Build       :: " "$TIMESTAMP-$ENV"
-
-sleep 3
-
-docker build -t cpd9957/named-data-networking:"$TIMESTAMP"-$ENV $PATH
-
-sleep 1
-
-echo "Docker image build completed..."
+source ./build.sh
 
 sleep 3
 
-apt-get update; apt-get install -y docker-compose
+RESULT=$(docker images | grep $IMAGES | awk '{print $2}' | grep $TIMESTAMP-$ENV)
 
-docker-compose stop; docker-compose down; docker-compose rm -f; docker network node_network -f; docker-compose build; docker-compose up -d; docker volume node_volume -f; docker-compose logs -f >> $ENV.log& date
+if [ -z "$RESULT" -o "$RESULT" != "$TIMESTAMP-$ENV" ]; then
+  echo "[-] Not Found Image"
+fi
 
+if [ "$RESULT" == "$TIMESTAMP-$ENV" ]; then
+  echo "[+] Image import completed..."
+
+  sleep 3
+
+  # apt-get update; apt-get install -y docker-compose
+
+  mv shared/log/$ENV.log shared/log/"$ENV-$(date +%Y.%m.%dT%H:%M:%S)".log
+
+  docker-compose stop
+  docker-compose down
+  docker-compose rm -f
+  docker-compose build
+  docker-compose up -d
+  docker-compose logs -f >>shared/log/$ENV.log &
+
+fi
+
+echo "[*] Done Composing..."
