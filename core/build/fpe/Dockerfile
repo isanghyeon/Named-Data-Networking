@@ -35,7 +35,7 @@ RUN apt-get install -y pkg-config libboost-all-dev python3-sphinx \
 # install ndn-cxx
 RUN git clone https://github.com/named-data/ndn-cxx.git /usr/src/app/ndn-cxx \
     && cp -rp /usr/src/app/src/curl /usr/src/app/ndn-cxx/ndn-cxx/security/transform/curl \
-    && cp -rp /usr/src/app/src/fpe-cipher.* /usr/src/app/ndn-cxx/ndn-cxx/security/transform \
+    && cp -rp /usr/src/app/src/aes-cipher.* /usr/src/app/ndn-cxx/ndn-cxx/security/transform \
     && cp -rp /usr/src/app/src/name.* /usr/src/app/ndn-cxx/ndn-cxx \
     && cp -rp /usr/src/app/src/wscript /usr/src/app/ndn-cxx \
     && cd /usr/src/app/ndn-cxx \
