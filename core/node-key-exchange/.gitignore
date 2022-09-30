@@ -1,8 +1,0 @@
-
-.DS_Store
-.idea/
-tests/*
-**/backup
-**/__pycache__/
-*.pyc
-shared/log/*.log
