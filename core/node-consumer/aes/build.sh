@@ -30,8 +30,6 @@ if [ "${check^^}" == "Y" ]; then
     fi
 fi
 
-echo "[+] Docker image build completed..."
-
 sleep 3
 
 echo "[*] Done building..."
