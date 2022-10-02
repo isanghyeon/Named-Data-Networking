@@ -19,6 +19,7 @@ async def appExchange(Authorization: list[str] | None = Header(default=None)):
     """
     try:
         sKey, fpeKey, fpeTweak = await exchange(name=Authorization[0], node_id=Authorization[1]).encryptHandler()
+
         return JSONResponse(
             status_code=HTTP_200_OK,
             content={
@@ -32,8 +33,8 @@ async def appExchange(Authorization: list[str] | None = Header(default=None)):
                 }
             }
         )
-    except Exception as e:
-        print("[Exchange] error:: ", e, " - ", datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
+    except IndexError as e:
+        print("[Exchange] error:: ", e, " - ", datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
 
 
 @app.get("/exchange/pkey")
