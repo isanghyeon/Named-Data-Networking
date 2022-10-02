@@ -35,6 +35,8 @@ RUN apt-get install -y pkg-config libboost-all-dev python3-sphinx \
 # install ndn-cxx
 RUN git clone https://github.com/named-data/ndn-cxx.git /usr/src/app/ndn-cxx \
     && cp -rp /usr/src/app/src/conf-cxx.py /usr/src/app/ndn-cxx/docs/conf.py \
+    && apt install doxygen graphviz python3-pip \
+    && pip3 install --user sphinx sphinxcontrib-doxylink \
     && cd /usr/src/app/ndn-cxx \
     && ./waf configure \
     && ./waf \

@@ -38,6 +38,8 @@ RUN git clone https://github.com/named-data/ndn-cxx.git /usr/src/app/ndn-cxx \
     && cp -rp /usr/src/app/src/wscript /usr/src/app/ndn-cxx \
     && cp -rp /usr/src/app/src/conf-cxx.py /usr/src/app/ndn-cxx/docs/conf.py \
     && cd /usr/src/app/ndn-cxx \
+    && apt install doxygen graphviz python3-pip \
+    && pip3 install --user sphinx sphinxcontrib-doxylink \
     && ./waf configure \
     && ./waf \
     && ./waf install \
