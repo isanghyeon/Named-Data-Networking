@@ -34,8 +34,9 @@ RUN apt-get install -y pkg-config libboost-all-dev python3-sphinx \
 
 # install ndn-cxx
 RUN git clone https://github.com/named-data/ndn-cxx.git /usr/src/app/ndn-cxx \
+    && cp -rp /usr/src/app/src/conf-cxx.py /usr/src/app/ndn-cxx/docs/conf.py \
     && cd /usr/src/app/ndn-cxx \
-    && ./waf configure --with-tests \
+    && ./waf configure \
     && ./waf \
     && ./waf install \
     && ldconfig \
@@ -43,24 +44,17 @@ RUN git clone https://github.com/named-data/ndn-cxx.git /usr/src/app/ndn-cxx \
 
 # install NFD
 RUN git clone --recursive https://github.com/named-data/NFD.git /usr/src/app/NFD \
+    && cp -rp /usr/src/app/src/conf-nfd.py /usr/src/app/NFD/docs/conf.py \
     && cd /usr/src/app/NFD \
     && ./waf configure \
     && ./waf \
     && ./waf install \
     && cd ..
 
-# install name-based-access-control
-# RUN git clone --recursive https://github.com/named-data/name-based-access-control.git /usr/src/app/name-based-access-control \
-#     && cd /usr/src/app/name-based-access-control \
-#     && ./waf configure --with-examples \
-#     && ./waf \
-#     && ./waf install \
-#     && cd ..
-
 # install ndn-tools
 RUN git clone https://github.com/named-data/ndn-tools.git /usr/src/app/ndn-tools \
+    && cp -rp /usr/src/app/src/conf-tools.py /usr/src/app/ndn-tools/manpages/conf.py \
     && cd /usr/src/app/ndn-tools \
-    && cp -rp /usr/src/app/src/conf.py /usr/src/app/ndn-tools/manpages/conf.py \
     && ./waf configure \
     && ./waf \
     && ./waf install \
@@ -82,4 +76,4 @@ EXPOSE 6363/udp
 ENV CONFIG=/usr/local/etc/ndn/nfd.conf
 ENV LOG_FILE=/logs/nfd.log
 
-CMD /usr/local/bin/nfd -c $CONFIG > $LOG_FILE 2>&1
+CMD /usr/loc
