@@ -12,12 +12,15 @@ RUN chmod -R 755 /usr/src/app
 
 # install tools
 RUN  apt-get update \
-     && apt-get install -y net-tools git curl wget build-essential
+     && apt-get install -y net-tools git curl wget build-essential vim
 
 # install tools
 RUN apt-get update \
-    && apt-get install -y wget net-tools vim git curl build-essential gcc g++ clang cmake \
-    && apt-get install -y zlib1g-dev libncurses5-dev libgdbm-dev libnss3-dev libssl-dev libreadline-dev libffi-dev libsqlite3-dev libbz2-dev
+    && apt-get install -y wget net-tools vim git build-essential gcc g++ clang cmake \
+    && apt-get install -y zlib1g-dev libncurses5-dev libgdbm-dev libnss3-dev libssl-dev libreadline-dev libffi-dev libsqlite3-dev libbz2-dev \
+    && apt-get install -y pkg-config libboost-all-dev \
+    && apt-get install -y graphviz software-properties-common libboost-all-dev libpcap-dev \
+    && apt-get install -y libsystemd-dev valgrind libwebsocketpp-dev libcurl4-openssl-dev
 
 # install Python3
 RUN mkdir -p /usr/src/app/python@3 \
@@ -27,6 +30,8 @@ RUN mkdir -p /usr/src/app/python@3 \
     && python3.9 --version; python3.9 -m pip --version \
     && cd /usr/src/app
 
+RUN apt-get install -y doxygen graphviz python3-sphinx \
+    && pythopn3.9 -m pip install --user sphinx sphinxcontrib-doxylnk
 
 # install ndn-cxx
 RUN git clone https://github.com/named-data/ndn-cxx.git /usr/src/app/ndn-cxx \
@@ -38,8 +43,6 @@ RUN git clone https://github.com/named-data/ndn-cxx.git /usr/src/app/ndn-cxx \
     && cp -rp /usr/src/app/src/wscript /usr/src/app/ndn-cxx \
     && cp -rp /usr/src/app/src/conf-cxx.py /usr/src/app/ndn-cxx/docs/conf.py \
     && cd /usr/src/app/ndn-cxx \
-    && apt-get install -y doxygen graphviz python3-pip \
-    && pip3 install --user sphinx sphinxcontrib-doxylink \
     && ./waf configure \
     && ./waf \
     && ./waf install \

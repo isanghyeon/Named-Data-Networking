@@ -12,11 +12,11 @@ RUN chmod -R 755 /usr/src/app
 
 # install tools
 RUN  apt-get update \
-     && apt-get install -y net-tools git curl wget build-essential
+     && apt-get install -y net-tools git curl wget build-essential vim
 
 # install tools
 RUN apt-get update \
-    && apt-get install -y wget net-tools vim git curl build-essential gcc g++ clang cmake \
+    && apt-get install -y wget net-tools vim git  build-essential gcc g++ clang cmake \
     && apt-get install -y zlib1g-dev libncurses5-dev libgdbm-dev libnss3-dev libssl-dev libreadline-dev libffi-dev libsqlite3-dev libbz2-dev
 
 # install Python3
