@@ -20,7 +20,6 @@
 | Type | Docker Hub | Base OS Img | PATH |
 |:------------|:--------------------------|:------------|:-----------------:|  
 | AES | cpd9957/named-data-networking:2022.10-aes | Ubuntu 20.04 LTS  | [enc-evp_aes/] |
-|    | cpd9957/named-data-networkin:2022.10-aes | Ubuntu 20.04 LTS  | [enc-evp_aes/] |
 | Format Preserving Encryption | cpd9957/named-data-networkin:2022.10-fpe | Ubuntu 20.04 LTS | [enc-fpe_ff3/]|
 | None | cpd9957/named-data-networkin:2022.10-none | Ubuntu 20.04 LTS | [enc-none/]|
 
