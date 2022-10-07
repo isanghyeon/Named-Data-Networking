@@ -36,7 +36,7 @@ public:
   void
   run()
   {
-    m_face.setInterestFilter("/example/testApp/randomData",
+    m_face.setInterestFilter(Name("/sch.ac.kr/calab/research.file", 0),
                              std::bind(&Producer::onInterest, this, _1, _2),
                              nullptr, // RegisterPrefixSuccessCallback is optional
                              std::bind(&Producer::onRegisterFailed, this, _1, _2));
@@ -56,7 +56,7 @@ private:
   {
     std::cout << ">> I: " << interest << std::endl;
 
-    static const std::string content("Hello, world!");
+    static const std::string content("m9sUXkyY2hfQhurPTbmH5yYxOhyMQYwh915YINlnMAq3GrqHVo6aZPEPVp3MCKVxOXzOD0GlMjDlOOtDtUdcEIzUAAX2X66mgypXqmO4zr3n0m6O1NmVNU2f7rp5iYUiRU2MndiRFa4vXbFdQKZZIJw5JLpFTHMXq0bIirnwRgPPYxbndoNPbIbxZbp0tk1MFlf0zwG8WDEIrCiARe4DegCUZMLsaEQqL72o8j31yVPtyrT06OmTouv5LKnlYcLs4d6lMgxJh7njqP9ko8TV9gTwwlwsaPY5y7bHeQfAExdHhUVS5RW5VZY0NzuJv53QQZPaV5ChKdvqzkr6HBKTP9KvNMpcWpyZy8uETgtojeInso013CYXDPIFfOxcItLKuxRzHgaUfb2MhfrorB9DvWDXvd2e6RKnKr7pOhsr9OjbvWIXJd0NXZmygo4WKCiRY9tL1zeyEG4no7mgHsPttFGlTdbvLcYwp9MFAyqBayACrDGvUEH58Hk4UDpprPpxIvfMb0bihdH10S7cut8hbxutSFwhVLzQihJxn4YlxiQwshbXPTqA6yNSlzcuKFWGA3YqQFeXVFtVgsujfKKjkF4pE05ONFbQyBEvFklVeiyXM406RJNJEo7g0muWOFeUAC6HoWeeZBHzT12jhnog2uCmBllHhI2W1l4KPyHeLVm8HO19PtLgNa3xUYnS2eIx9ZGTqAyU5g2QHCAkOSK3qhwtrNUl7RiVq1P47dau570A2fRmi5F6C2GjFjrTwODhsUtnsozjHtzu3GCKezLkrWmBpXrLJzHvOJsdhaDk6yt5xKF8F6iPXL065XUc1daZhMhIxa6XFtiDvqI74jF026lGQgMzYQawE1p81rMmq735VCzsEtdN7mpfZTU78uuenBKOEwE32kFgDxAVbTDyyc3Yrr0gH3gu4IcqlBxz7WNvFdyFkaK34vb0S8sCteOXMQMN3I2hMLaiM6lWzpyGqQ05rRxQHTPy5gSza5VF");
 
     // Create Data packet
     auto data = make_shared<Data>(interest.getName());
