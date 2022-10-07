@@ -19,31 +19,27 @@
 ## Cipher Types
 | Type | Docker Hub | Base OS Img | PATH |
 |:------------|:--------------------------|:------------|:-----------------:|  
-| AES | cpd9957/named_data_networking:aes-0.2 | Ubuntu 20.04 LTS  | [enc-evp_aes/] |
-|    | cpd9957/named_data_networking:aes-0.2 | Ubuntu 20.04 LTS  | [enc-evp_aes/] |
-| Format Preserving Encryption | cpd9957/named_data_networking:fpe-0.9 | Ubuntu 20.04 LTS | [enc-fpe_ff3/]|
-| None | cpd9957/named_data_networking:0.1 | Ubuntu 20.04 LTS | [enc-none/]|
+| AES | cpd9957/named-data-networking:2022.10-aes | Ubuntu 20.04 LTS  | [enc-evp_aes/] |
+| Format Preserving Encryption | cpd9957/named-data-networkin:2022.10-fpe | Ubuntu 20.04 LTS | [enc-fpe_ff3/]|
+| None | cpd9957/named-data-networkin:2022.10-none | Ubuntu 20.04 LTS | [enc-none/]|
 
 <div class=col-12>
 <table>
     <thead>
         <tr>
             <th>Layer 1</th>
-            <th>Layer 2</th>
             <th>Layer 3</th>
         </tr>
     </thead>
     <tbody>
         <tr>
-            <td rowspan=4>cpd9957/named_data_networking:0.1 </td>
-            <td rowspan=2>L2 Name A</td>
+            <td rowspan=4>cpd9957/named-data-networkin:2022.10-none </td>
             <td>L3 Name A</td>
         </tr>
         <tr>
             <td>L3 Name B</td>
         </tr>
         <tr>
-            <td rowspan=2>L2 Name B</td>
             <td>L3 Name C</td>
         </tr>
         <tr>
@@ -60,7 +56,6 @@
 | enc-evp_aes | enc-evp_aes |
 | enc-fpe_ff3 | enc-fpe_ff3 | 
 | enc-none | enc-none |
-| tests | test |
 
 ----
 
@@ -74,6 +69,6 @@
 [OpenSSL]: <https://openssl.org/>
 [Format-Preserving-Encryption]: <https://github.com/0NG/Format-Preserving-Encryption>
 
-[enc-evp_aes/]: <https://github.com/isanghyeon/CALab_Named-Data/blob/main/enc-evp_aes/README.md>
-[enc-fpe_ff3/]: <https://github.com/isanghyeon/CALab_Named-Data/blob/main/enc-fpe_ff3/README.md>
-[enc-none/]: <https://github.com/isanghyeon/CALab_Named-Data/blob/main/enc-none/README.md>
+[enc-evp_aes/]: <https://github.com/isanghyeon/named-data-networking>
+[enc-fpe_ff3/]: <https://github.com/isanghyeon/named-data-networking>
+[enc-none/]: <https://github.com/isanghyeon/named-data-networking>
