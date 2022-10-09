@@ -1,4 +1,0 @@
-
-GET http://localhost:20010/generator
-Content-Type: application/json
-Authorization: a905157f455040c9b2183bcee9799aaecc1cfb1258895de304569d102c23bd15
