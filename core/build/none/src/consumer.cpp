@@ -21,12 +21,23 @@
 
 #include <ndn-cxx/face.hpp>
 #include <ndn-cxx/security/validator-config.hpp>
+#include <ndn-cxx/util/random.hpp>
 
 #include <iostream>
+#include <fstream>
+
+using namespace std;
+
+std::ofstream fp("/home/named-data-networking/core/build/aes/src/result-300");
+ndn::time::steady_clock::time_point binaryExecTime;
+ndn::time::nanoseconds runTime;
 
 // Enclosing code in ndn simplifies coding (can also use `using namespace ndn`)
 namespace ndn {
-// Additional nested namespaces should be used to prevent/limit name conflicts
+    time::steady_clock::time_point sendTime;
+    time::nanoseconds rtt;
+
+    // Additional nested namespaces should be used to prevent/limit name conflicts
     namespace examples {
 
         class Consumer {
@@ -37,16 +48,17 @@ namespace ndn {
 
             void
             run() {
-                Name first("/localhost/nfd/faces/query/%96%19r%17tcp4%3A%2F%2F172.31.0.1%3A20304");
-
-                Name interestName("/localhost/nfd/faces/query/%96%19r%17tcp4%3A%2F%2F172.30.0.1%3A20304");
+                Name interestName("/sch.ac.kr/calab/research.file");
                 interestName.appendVersion();
 
                 Interest interest(interestName);
                 interest.setMustBeFresh(true);
                 interest.setInterestLifetime(6_s); // The default is 4 seconds
 
+                sendTime = time::steady_clock::now();
+
                 std::cout << "Sending Interest " << interest << std::endl;
+
                 m_face.expressInterest(interest,
                                        std::bind(&Consumer::onData, this, _1, _2),
                                        std::bind(&Consumer::onNack, this, _1, _2),
@@ -59,15 +71,27 @@ namespace ndn {
         private:
             void
             onData(const Interest &, const Data &data) {
-                std::cout << "Received Data " << data << std::endl;
+                rtt = time::steady_clock::now() - sendTime;
 
-                m_validator.validate(data,
-                                     [](const Data &) {
-                                         std::cout << "Data conforms to trust schema" << std::endl;
-                                     },
-                                     [](const Data &, const security::ValidationError &error) {
-                                         std::cout << "Error authenticating data: " << error << std::endl;
-                                     });
+                runTime = time::steady_clock::now() - binaryExecTime;
+
+                std::cout << "Received Data " << data << std::endl;
+                std::cout << "\n" << std::endl;
+                std::cout << "Content Data " << data.getContent() << std::endl;
+                std::cout << "Round Trim Time " << rtt << std::endl;
+
+
+                fp << "runtime: " << runTime << "; rtt: " << rtt << endl;
+
+                std::cout << "\n" << std::endl;
+
+//                m_validator.validate(data,
+//                                     [](const Data &) {
+//                                         std::cout << "Data conforms to trust schema" << std::endl;
+//                                     },
+//                                     [](const Data &, const security::ValidationError &error) {
+//                                         std::cout << "Error authenticating data: " << error << std::endl;
+//                                     });
             }
 
             void
@@ -92,7 +116,12 @@ int
 main(int argc, char **argv) {
     try {
         ndn::examples::Consumer consumer;
-        consumer.run();
+
+        binaryExecTime = ndn::time::steady_clock::now();
+
+        for (int i = 0; i < 100; i++)
+            consumer.run();
+
         return 0;
     }
     catch (const std::exception &e) {
