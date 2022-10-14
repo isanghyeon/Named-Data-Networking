@@ -1,0 +1,28 @@
+version: '3'
+
+services: # consumer container
+  node1:
+    image: cpd9957/named-data-networking:2022.09-fpe
+    ports:
+      - "20200:6363/tcp" # ndn 1
+      - "20200:6363/udp"
+      - "20201:6363/tcp" # ndn 2
+      - "20201:6363/udp"
+      - "20202:8080/tcp" # ndn http
+    networks:
+      - node_network
+
+  node2: 
+    image: cpd9957/named-data-networking:2022.09-fpe
+    ports:
+      - "20204:6363/tcp" # ndn 1
+      - "20204:6363/udp"
+      - "20205:6363/tcp" # ndn 2
+      - "20205:6363/udp"
+      - "20206:8080/tcp" # ndn http
+    networks:
+      - node_network
+
+networks:
+  node_network:
+    driver: bridge
