@@ -3,8 +3,6 @@
 .idea/
 tests/*
 **/backup
-venv/
 **/__pycache__/
 *.pyc
-*.log
-*.out
+shared/log/*.log
