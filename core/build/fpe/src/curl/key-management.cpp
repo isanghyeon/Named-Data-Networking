@@ -240,7 +240,7 @@ void KeyManagement::pubKeyExchange()
     this->list = curl_slist_append(this->list, "Accept: application/json");
     this->list = curl_slist_append(this->list, header_author);
     this->list = curl_slist_append(this->list,
-                                   "Authorization: LS0tLS1CRUdJTiBQVUJMSUMgS0VZLS0tLS0KTUlJQ0lqQU5CZ2txaGtpRzl3MEJBUUVGQUFPQ0FnOEFNSUlDQ2dLQ0FnRUF5ZmZCWklMRUdtelJGMVdWVXNUKwpGYmo1TExmeVNTR2RPZEVzZktXVElGTllCd3NEZWJpUmxmYkZQTUNrNUdzTkRQaGpuRnN3TGlGU1owZG5XczVYCkc5T09HRzN2bFNGVGxrdkh4SVo2cG9pM3QzQ0E1enlHemtGcHdRYnBBNmtBc3VNY0JLaElTeWRWUjdyWWRSUjkKd3E4U3N0cnpkQ0xqTHhXUFUzcjJlY2JHM0x5dkFRWmszSVAvUldEbldNMlYveWphVkRyN1BGSm5FRTNLdHFFTwpnM05HNjZmSlM1RVdqNGUreGJmUDVhSVlNMWRyRWlyQWVJQXpwWHNXUEtTZ1NodTBQQW1yaWZLMWVZU0ZTT2UzCnZ1NEpUZ3lzSWdvc2piTE1RQ2NXT04zTkhEd0xZcDZ0dzNuQVk3T2p4NkZsY2gzczd6ZHhLRVZsRGoyVEdUcEEKRXMwZFdmbEN0ME1VLzd3dlYxTjJWR2lrUysvbjNJMmJiWE5LbHJHYVE1S083NHZtbmhWTTBwOHY3SUZsdHZCdgpoZWR1VkxXeE9DU25VYjBEd3FuYW42ampSN1F5NVpUQ201QTlxMDJFWkJVNkxicHpwS1FsMVczVmthWFhDQ01uClVXcVl6ZmxYQ2p2VU5lZ0Z5TFRnR1ZSN051RWlEQlpxMzc1M2lKM0UvVStJN0g0OUM2djR4ZGQvTlpvU0UwV1UKZ0ZJdnYxa2JwTEpVTHdacXpwTkVkd3lTK2JyWFYvdmxBbjFUUUNZVDgrM0EvMFJBSlJXOEptTlhHcHpscXNWbApZVWkxL3puYVRwMUVYZWU4MlV2ZkxLSTNnTXArUFZYKzZDL0xFMFJoTVRQV3VjY3BkYzY0cU9wS1NaRW1DRWJOCklPMUxyWmRnUGVVSythVG52Uk1vaTRNQ0F3RUFBUT09Ci0tLS0tRU5EIFBVQkxJQyBLRVktLS0tLQ==");
+		    "Authorization: LS0tLS1CRUdJTiBQVUJMSUMgS0VZLS0tLS0KTUlJQ0lqQU5CZ2txaGtpRzl3MEJBUUVGQUFPQ0FnOEFNSUlDQ2dLQ0FnRUF6c1FmcHd6SkhPWFpJK2Vkc3IycAphVzZmb1lueEN1Q2NLRHVra2M4WWNrT3ArMFNzbmFSdXFMQ29pWUFiZVpZWlprTFhKN00xSEIvLzduMnEyY0JNCm9IUVlhaGpYLzBqdW50amFaQ0VrVGRrbFhzVjgwM2RLQTUybHZSd3JUcDczVmxncG1zSEw4OEc2c05XTWZ5elYKU0N0ZmVjTWZhdnJLallFaWNWUkhTa2tkb3RheUFCTnJzQUNHSld1cHljbm1uK3AzbU9zMzdNM0N1QllCYnVRcAo0dnQyTFZNZlFTbkVvUUhRdlFJZTE2QXdJL1lFUzYzbUtNVnRJc01jVVdUb3dJUjMxVmRVMDVNOXpqWTdndFN2CjNwcjZlNXEybkk3MVNJRXMweXBCV1htTnpnNHQ4VGVtU2Q4U1VUekRkWDJqRzJrZm15ZEVXWnpjQjdZa05SakkKbDRWK2VOOTBWNm5LQXBuZ05UMGF2OUpmVDFIYzZZSWpFdHVDbVZqeHhES3lGd3ZmMWFITnVjZWZjbVJWTlU0QwprUUhQK2ZEMkFLMklTV0E1OWpCcU9oSFdTL0QxdFNleDRsSHRHQXdvbCtLNVhwOFZ2NWVTTGV4UE1kenlYUjIzCkNUVC9qMkt3L0IrUk41Uy94YVlZTlpjb0p0MGNKMGhYdy8vdmFuUW4rRzdhL0ZSVGU0d3REREhoelpKTkFCcVkKM0IwbXVNR29nOHNPWTUwbTNhdkt0MTBDNTVHUDRUU0tNTTgwUFkrUWVBNzB1L2d6WXJNdzNSYzZBU0ErZzNZRQpGOGFocnNabUNMVkkyR3VzdEp2RVlmZ2hYVjk4MlV4SnVjZ0xXVWJ0eUt3UWFnYmw3dnhra05YdzR1ek9zdUZoCjZaZGRWYW5kSG56Vm1acGpjU0Z1T0lVQ0F3RUFBUT09Ci0tLS0tRU5EIFBVQkxJQyBLRVktLS0tLQ==");
 
     result = Connect(role);
 
@@ -328,7 +328,7 @@ void KeyManagement::KeyExchange()
         0,
     };
 
-    private_decrypt(skey_enc, 128, (unsigned char *)privkey_char, (unsigned char *)skey);
+    private_decrypt(skey_enc, 512, (unsigned char *)privkey_char, (unsigned char *)skey);
 
     char fpekey[100];
     char fpetweak[100];
@@ -368,7 +368,7 @@ string KeyManagement::getLifecycle()
 string KeyManagement::Connect(string role)
 {
     // string baseURL = "192.168.0.67:20100/";
-    string baseURL = "192.168.0.161:20101/";
+    string baseURL = "logos.sch.ac.kr:20100/";
     string result;
 
     char *URL;

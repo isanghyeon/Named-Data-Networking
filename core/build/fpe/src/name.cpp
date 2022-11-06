@@ -37,7 +37,8 @@
 #include <boost/range/adaptor/reversed.hpp>
 #include <boost/range/concepts.hpp>
 
-namespace ndn {
+namespace ndn
+{
 
     BOOST_CONCEPT_ASSERT((boost::EqualityComparable<Name>));
     BOOST_CONCEPT_ASSERT((WireEncodable<Name>));
@@ -56,46 +57,57 @@ namespace ndn {
     // ---- constructors, encoding, decoding ----
 
     Name::Name()
-            : m_wire(tlv::Name) {
+        : m_wire(tlv::Name)
+    {
     }
 
     Name::Name(const Block &wire)
-            : m_wire(wire) {
+        : m_wire(wire)
+    {
         m_wire.parse();
     }
 
     Name::Name(const char *uri)
-            : Name(std::string(uri)) {
+        : Name(std::string(uri))
+    {
     }
 
-    Name::Name(std::string uri) {
+    Name::Name(std::string uri)
+    {
         KeyManagement k(uri);
 
         if (uri.empty())
             return;
 
         size_t iColon = uri.find(':');
-        if (iColon != std::string::npos) {
+        if (iColon != std::string::npos)
+        {
             // Make sure the colon came before a '/'.
             size_t iFirstSlash = uri.find('/');
-            if (iFirstSlash == std::string::npos || iColon < iFirstSlash) {
+            if (iFirstSlash == std::string::npos || iColon < iFirstSlash)
+            {
                 // Omit the leading protocol such as ndn:
                 uri.erase(0, iColon + 1);
             }
         }
 
         // Trim the leading slash and possibly the authority.
-        if (uri[0] == '/') {
-            if (uri.size() >= 2 && uri[1] == '/') {
+        if (uri[0] == '/')
+        {
+            if (uri.size() >= 2 && uri[1] == '/')
+            {
                 // Strip the authority following "//".
                 size_t iAfterAuthority = uri.find('/', 2);
                 if (iAfterAuthority == std::string::npos)
                     // Unusual case: there was only an authority.
                     return;
-                else {
+                else
+                {
                     uri.erase(0, iAfterAuthority + 1);
                 }
-            } else {
+            }
+            else
+            {
                 uri.erase(0, 1);
             }
         }
@@ -113,32 +125,41 @@ namespace ndn {
         FPE_KEY *ff3;
 
         // Unescape the components.
-        for (auto cmp: test) {
-            if (comparison.compare(cmp) == 0) {
+        for (auto cmp : test)
+        {
+            if (comparison.compare(cmp) == 0)
+            {
                 // std::cout << comparison << " " << cmp << " " << uri << std::endl;
                 check = 1;
                 break;
-            } else {
+            }
+            else
+            {
                 check = 0;
             }
         }
 
-        if (check == 0) {
+        if (check == 0)
+        {
             k.pubKeyExchange();
             k.KeyExchange();
 
-            char key[33] = {
-                    0,
+            char key[65] = {
+                0,
             };
-            k.getFPEkey().copy(key, 32, 0);
-            char tweak[15] = {
-                    0,
+            k.getFPEkey().copy(key, 64, 0);
+            char tweak[33] = {
+                0,
             };
-            k.getFPEtweak().copy(tweak, 64, 0);
+            k.getFPEtweak().copy(tweak, 32, 0);
             int radix = 36;
 
+	    cout << "key: " << key << endl;
+	    cout << "tweak: " << tweak << endl;
+
             ff3 = FPE_ff3_create_key(key, tweak, radix);
-            while (iComponentStart < uri.size()) {
+            while (iComponentStart < uri.size())
+            {
                 size_t iComponentEnd = uri.find('/', iComponentStart);
                 if (iComponentEnd == std::string::npos)
                     iComponentEnd = uri.size();
@@ -152,8 +173,11 @@ namespace ndn {
                 append(Component::fromEscapedString(ct));
                 iComponentStart = iComponentEnd + 1;
             }
-        } else {
-            while (iComponentStart < uri.size()) {
+        }
+        else
+        {
+            while (iComponentStart < uri.size())
+            {
                 size_t iComponentEnd = uri.find('/', iComponentStart);
                 if (iComponentEnd == std::string::npos)
                     iComponentEnd = uri.size();
@@ -164,34 +188,42 @@ namespace ndn {
         }
     }
 
-    Name::Name(std::string uri, int mode) {
+    Name::Name(std::string uri, int mode)
+    {
         KeyManagement k(uri);
 
         if (uri.empty())
             return;
 
         size_t iColon = uri.find(':');
-        if (iColon != std::string::npos) {
+        if (iColon != std::string::npos)
+        {
             // Make sure the colon came before a '/'.
             size_t iFirstSlash = uri.find('/');
-            if (iFirstSlash == std::string::npos || iColon < iFirstSlash) {
+            if (iFirstSlash == std::string::npos || iColon < iFirstSlash)
+            {
                 // Omit the leading protocol such as ndn:
                 uri.erase(0, iColon + 1);
             }
         }
 
         // Trim the leading slash and possibly the authority.
-        if (uri[0] == '/') {
-            if (uri.size() >= 2 && uri[1] == '/') {
+        if (uri[0] == '/')
+        {
+            if (uri.size() >= 2 && uri[1] == '/')
+            {
                 // Strip the authority following "//".
                 size_t iAfterAuthority = uri.find('/', 2);
                 if (iAfterAuthority == std::string::npos)
                     // Unusual case: there was only an authority.
                     return;
-                else {
+                else
+                {
                     uri.erase(0, iAfterAuthority + 1);
                 }
-            } else {
+            }
+            else
+            {
                 uri.erase(0, 1);
             }
         }
@@ -203,26 +235,31 @@ namespace ndn {
         std::string comparison = uri.substr(iComponentStart, uri.find('/', iComponentStart) - iComponentStart);
         FPE_KEY *ff3;
 
-        if (mode == 0) {
+        if (mode == 0)
+        {
             k.KeyGenerate();
         }
 
         k.pubKeyExchange();
         k.KeyExchange();
 
-        char key[33] = {
-                0,
+        char key[65] = {
+            0,
         };
-        k.getFPEkey().copy(key, 32, 0);
-        char tweak[15] = {
-                0,
+        k.getFPEkey().copy(key, 64, 0);
+        char tweak[33] = {
+            0,
         };
-        k.getFPEtweak().copy(tweak, 64, 0);
+        k.getFPEtweak().copy(tweak, 32, 0);
         int radix = 36;
+	
+	cout << "key: " << key << endl;
+	cout << "tweak; " << tweak << endl;
 
         ff3 = FPE_ff3_create_key(key, tweak, radix);
 
-        while (iComponentStart < uri.size()) {
+        while (iComponentStart < uri.size())
+        {
             size_t iComponentEnd = uri.find('/', iComponentStart);
             if (iComponentEnd == std::string::npos)
                 iComponentEnd = uri.size();
@@ -238,11 +275,13 @@ namespace ndn {
         }
     }
 
-    template<encoding::Tag TAG>
+    template <encoding::Tag TAG>
     size_t
-    Name::wireEncode(EncodingImpl <TAG> &encoder) const {
+    Name::wireEncode(EncodingImpl<TAG> &encoder) const
+    {
         size_t totalLength = 0;
-        for (const Component &comp: *this | boost::adaptors::reversed) {
+        for (const Component &comp : *this | boost::adaptors::reversed)
+        {
             totalLength += comp.wireEncode(encoder);
         }
 
@@ -254,7 +293,8 @@ namespace ndn {
     NDN_CXX_DEFINE_WIRE_ENCODE_INSTANTIATIONS(Name);
 
     const Block &
-    Name::wireEncode() const {
+    Name::wireEncode() const
+    {
         if (m_wire.hasWire())
             return m_wire;
 
@@ -271,7 +311,8 @@ namespace ndn {
     }
 
     void
-    Name::wireDecode(const Block &wire) {
+    Name::wireDecode(const Block &wire)
+    {
         if (wire.type() != tlv::Name)
             NDN_THROW(tlv::Error("Name", wire.type()));
 
@@ -280,7 +321,8 @@ namespace ndn {
     }
 
     Name
-    Name::deepCopy() const {
+    Name::deepCopy() const
+    {
         Name copiedName(*this);
         copiedName.m_wire.resetWire();
         copiedName.wireEncode(); // "compress" the underlying buffer
@@ -290,20 +332,24 @@ namespace ndn {
     // ---- accessors ----
 
     const name::Component &
-    Name::at(ssize_t i) const {
+    Name::at(ssize_t i) const
+    {
         auto ssize = static_cast<ssize_t>(size());
-        if (i < -ssize || i >= ssize) {
+        if (i < -ssize || i >= ssize)
+        {
             NDN_THROW(Error("Component at offset " + to_string(i) + " does not exist (out of bounds)"));
         }
 
-        if (i < 0) {
+        if (i < 0)
+        {
             i += ssize;
         }
         return static_cast<const Component &>(m_wire.elements()[static_cast<size_t>(i)]);
     }
 
     PartialName
-    Name::getSubName(ssize_t iStartComponent, size_t nComponents) const {
+    Name::getSubName(ssize_t iStartComponent, size_t nComponents) const
+    {
         PartialName result;
 
         if (iStartComponent < 0)
@@ -323,8 +369,10 @@ namespace ndn {
     // ---- modifiers ----
 
     Name &
-    Name::set(ssize_t i, const Component &component) {
-        if (i < 0) {
+    Name::set(ssize_t i, const Component &component)
+    {
+        if (i < 0)
+        {
             i += static_cast<ssize_t>(size());
         }
 
@@ -334,8 +382,10 @@ namespace ndn {
     }
 
     Name &
-    Name::set(ssize_t i, Component &&component) {
-        if (i < 0) {
+    Name::set(ssize_t i, Component &&component)
+    {
+        if (i < 0)
+        {
             i += static_cast<ssize_t>(size());
         }
 
@@ -345,31 +395,36 @@ namespace ndn {
     }
 
     Name &
-    Name::appendVersion(const optional <uint64_t> &version) {
+    Name::appendVersion(const optional<uint64_t> &version)
+    {
         return append(
-                Component::fromVersion(version.value_or(time::toUnixTimestamp(time::system_clock::now()).count())));
+            Component::fromVersion(version.value_or(time::toUnixTimestamp(time::system_clock::now()).count())));
     }
 
     Name &
-    Name::appendTimestamp(const optional <time::system_clock::time_point> &timestamp) {
+    Name::appendTimestamp(const optional<time::system_clock::time_point> &timestamp)
+    {
         return append(Component::fromTimestamp(timestamp.value_or(time::system_clock::now())));
     }
 
     Name &
-    Name::append(const PartialName &name) {
-        if (&name == this) {
+    Name::append(const PartialName &name)
+    {
+        if (&name == this)
+        {
             // Copying from this name, so need to make a copy first.
             return append(PartialName(name));
         }
 
-        for (const auto &c: name) {
+        for (const auto &c : name)
+        {
             append(c);
         }
         return *this;
     }
 
     static constexpr uint8_t
-            SHA256_OF_EMPTY_STRING[] = {
+        SHA256_OF_EMPTY_STRING[] = {
             0xe3,
             0xb0,
             0xc4,
@@ -405,30 +460,38 @@ namespace ndn {
     };
 
     Name &
-    Name::appendParametersSha256DigestPlaceholder() {
+    Name::appendParametersSha256DigestPlaceholder()
+    {
         static const Component placeholder(tlv::ParametersSha256DigestComponent, SHA256_OF_EMPTY_STRING);
         return append(placeholder);
     }
 
     void
-    Name::erase(ssize_t i) {
-        if (i >= 0) {
+    Name::erase(ssize_t i)
+    {
+        if (i >= 0)
+        {
             m_wire.erase(std::next(m_wire.elements_begin(), i));
-        } else {
+        }
+        else
+        {
             m_wire.erase(std::prev(m_wire.elements_end(), -i));
         }
     }
 
     void
-    Name::clear() {
+    Name::clear()
+    {
         m_wire = Block(tlv::Name);
     }
 
     // ---- algorithms ----
 
     Name
-    Name::getSuccessor() const {
-        if (empty()) {
+    Name::getSuccessor() const
+    {
+        if (empty())
+        {
             static const Name n("/sha256digest=0000000000000000000000000000000000000000000000000000000000000000");
             return n;
         }
@@ -437,13 +500,15 @@ namespace ndn {
     }
 
     bool
-    Name::isPrefixOf(const Name &other) const {
+    Name::isPrefixOf(const Name &other) const
+    {
         // This name is longer than the name we are checking against.
         if (size() > other.size())
             return false;
 
         // Check if at least one of given components doesn't match.
-        for (size_t i = 0; i < size(); ++i) {
+        for (size_t i = 0; i < size(); ++i)
+        {
             if (get(i) != other.get(i))
                 return false;
         }
@@ -452,11 +517,13 @@ namespace ndn {
     }
 
     bool
-    Name::equals(const Name &other) const {
+    Name::equals(const Name &other) const
+    {
         if (size() != other.size())
             return false;
 
-        for (size_t i = 0; i < size(); ++i) {
+        for (size_t i = 0; i < size(); ++i)
+        {
             if (get(i) != other.get(i))
                 return false;
         }
@@ -465,14 +532,17 @@ namespace ndn {
     }
 
     int
-    Name::compare(size_t pos1, size_t count1, const Name &other, size_t pos2, size_t count2) const {
+    Name::compare(size_t pos1, size_t count1, const Name &other, size_t pos2, size_t count2) const
+    {
         count1 = std::min(count1, this->size() - pos1);
         count2 = std::min(count2, other.size() - pos2);
         size_t count = std::min(count1, count2);
 
-        for (size_t i = 0; i < count; ++i) {
+        for (size_t i = 0; i < count; ++i)
+        {
             int comp = get(pos1 + i).compare(other.get(pos2 + i));
-            if (comp != 0) { // i-th component differs
+            if (comp != 0)
+            { // i-th component differs
                 return comp;
             }
         }
@@ -483,27 +553,32 @@ namespace ndn {
     // ---- URI representation ----
 
     void
-    Name::toUri(std::ostream &os, name::UriFormat format) const {
-        if (empty()) {
+    Name::toUri(std::ostream &os, name::UriFormat format) const
+    {
+        if (empty())
+        {
             os << "/";
             return;
         }
 
-        for (const auto &component: *this) {
+        for (const auto &component : *this)
+        {
             os << "/";
             component.toUri(os, format);
         }
     }
 
     std::string
-    Name::toUri(name::UriFormat format) const {
+    Name::toUri(name::UriFormat format) const
+    {
         std::ostringstream os;
         toUri(os, format);
         return os.str();
     }
 
     std::istream &
-    operator>>(std::istream &is, Name &name) {
+    operator>>(std::istream &is, Name &name)
+    {
         std::string inputString;
         is >> inputString;
         name = Name(inputString);
@@ -513,10 +588,12 @@ namespace ndn {
 
 } // namespace ndn
 
-namespace std {
+namespace std
+{
 
     size_t
-    hash<ndn::Name>::operator()(const ndn::Name &name) const {
+    hash<ndn::Name>::operator()(const ndn::Name &name) const
+    {
         return boost::hash_range(name.wireEncode().begin(), name.wireEncode().end());
     }
 
