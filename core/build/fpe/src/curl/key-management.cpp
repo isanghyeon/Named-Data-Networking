@@ -302,7 +302,7 @@ void KeyManagement::KeyExchange()
 
     base64_decode(fpetweak_64, fpetweak_enc);
 
-    ifstream in("/usr/src/app/ndn-cxx/ndn-cxx/security/transform/curl/curl/private_key.pem");
+    ifstream in("/usr/src/app/ndn-cxx/ndn-cxx/security/transform/curl/private_key.pem");
     string privKey;
 
     if (in.is_open())
@@ -367,7 +367,6 @@ string KeyManagement::getLifecycle()
 
 string KeyManagement::Connect(string role)
 {
-    // string baseURL = "192.168.0.67:20100/";
     string baseURL = "logos.sch.ac.kr:20100/";
     string result;
 
