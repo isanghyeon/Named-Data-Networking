@@ -30,6 +30,7 @@ RUN git clone https://github.com/named-data/ndn-cxx.git /usr/src/app/ndn-cxx \
     && /usr/src/app/src/curl/* /usr/src/app/ndn-cxx/ndn-cxx/security/transform/curl/ \
     && /usr/src/app/src/consumer.cpp /usr/src/app/ndn-cxx/example/consumer.cpp \
     && /usr/src/app/src/producer.cpp /usr/src/app/ndn-cxx/example/producer.cpp \
+    && /usr/src/app/src/wscript /usr/src/app/ndn-cxx/ \
     && cd /usr/src/app/ndn-cxx \
     && ./waf configure --with-examples \
     && ./waf \
