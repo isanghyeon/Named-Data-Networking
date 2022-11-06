@@ -12,7 +12,6 @@ WORKDIR /usr/src/app
 
 # source copy
 COPY . /usr/src/app
-RUN chmod -R 755 /usr/src/app
 
 # install
 RUN  apt-get update \
@@ -32,7 +31,7 @@ RUN git clone https://github.com/named-data/ndn-cxx.git /usr/src/app/ndn-cxx \
     && cp -r  /usr/src/app/src/producer.cpp /usr/src/app/ndn-cxx/examples \
     && cp -r  /usr/src/app/src/wscript /usr/src/app/ndn-cxx/ \
     && cd /usr/src/app/ndn-cxx \
-    && ./waf configure --with-examples \
+    && ./waf configure \
     && ./waf \
     && ./waf install \
     && ldconfig \
@@ -65,6 +64,7 @@ RUN cp /usr/local/etc/ndn/nfd.conf.sample /usr/local/etc/ndn/nfd.conf \
     && ndnsec-cert-dump -i /`whoami` > default.ndncert \
     && mv default.ndncert /usr/local/etc/ndn/keys/default.ndncert
 
+RUN chmod -R 755 /usr/src/app
 
 RUN mkdir /share \
     && mkdir /logs
