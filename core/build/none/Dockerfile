@@ -39,6 +39,7 @@ RUN git clone https://github.com/named-data/ndn-cxx.git /usr/src/app/ndn-cxx \
     && ./waf \
     && ./waf install \
     && ldconfig \
+    && echo /usr/local/lib | tee /etc/ld.so.conf.d/ndn-cxx.conf \
     && cd ..
 
 # install NFD
