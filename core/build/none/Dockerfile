@@ -14,23 +14,13 @@ WORKDIR /usr/src/app
 COPY . /usr/src/app
 RUN chmod -R 755 /usr/src/app
 
-# install tools
+# install
 RUN  apt-get update \
-     && apt-get install -y net-tools git curl wget vim \
-     && apt-get install -y build-essential pkg-config python3-minimal libboost-all-dev libssl-dev libsqlite3-dev python3-sphinx \
+     && apt-get install -y net-tools git curl wget vim gcc g++ clang cmake make \
+     && apt-get install -y build-essential pkg-config python3-minimal libboost-all-dev libssl-dev libsqlite3-dev \
      && apt-get install -y doxygen graphviz python3-pip \
-     && apt-get install -y gcc g++ clang cmake make software-properties-common libpcap-dev libsystemd-dev valgrind libwebsocketpp-dev libcurl4-openssl-dev \
-     && apt-get install -y zlib1g-dev libncurses5-dev libgdbm-dev libnss3-dev libssl-dev libreadline-dev libffi-dev libsqlite3-dev libbz2-dev \
+     && apt-get install -y openssl libcurl4-openssl-dev \
      && pip3 install --user sphinx sphinxcontrib-doxylink
-
-# install Python3
-#RUN mkdir -p /usr/src/app/python@3 \
-#    && cd /usr/src/app/python@3 \
-#    && wget https://www.python.org/ftp/python/3.9.12/Python-3.9.12.tgz; tar -xf Python-3.9.12.tgz \
-#    && cd Python-3.9.12; ./configure --enable-optimizations;  make -j 12; make altinstall \
-#    && python3.9 --version; python3.9 -m pip --version \
-#    && cd /usr/src/app
-
 
 # install ndn-cxx
 RUN git clone https://github.com/named-data/ndn-cxx.git /usr/src/app/ndn-cxx \
@@ -40,7 +30,10 @@ RUN git clone https://github.com/named-data/ndn-cxx.git /usr/src/app/ndn-cxx \
     && ./waf install \
     && ldconfig \
     && echo /usr/local/lib | tee /etc/ld.so.conf.d/ndn-cxx.conf \
-    && cd ..
+    && cd /usr/src/app
+
+# install 2
+RUN apt-get install -y libpcap-dev libsystemd-dev
 
 # install NFD
 RUN git clone --recursive https://github.com/named-data/NFD.git /usr/src/app/NFD \
@@ -48,7 +41,7 @@ RUN git clone --recursive https://github.com/named-data/NFD.git /usr/src/app/NFD
     && ./waf configure \
     && ./waf \
     && ./waf install \
-    && cd ..
+    && cd /usr/src/app
 
 # install ndn-tools
 RUN git clone https://github.com/named-data/ndn-tools.git /usr/src/app/ndn-tools \
@@ -56,7 +49,7 @@ RUN git clone https://github.com/named-data/ndn-tools.git /usr/src/app/ndn-tools
     && ./waf configure \
     && ./waf \
     && ./waf install \
-    && cd ..
+    && cd /usr/src/app
 
 # initial configuration
 RUN cp /usr/local/etc/ndn/nfd.conf.sample /usr/local/etc/ndn/nfd.conf \
