@@ -59,7 +59,11 @@ RUN git clone https://github.com/named-data/ndn-tools.git /usr/src/app/ndn-tools
     && cd /usr/src/app
 
 # initial configuration
-RUN cp /usr/local/etc/ndn/nfd.conf.sample /usr/local/etc/ndn/nfd.conf
+RUN cp /usr/local/etc/ndn/nfd.conf.sample /usr/local/etc/ndn/nfd.conf \
+    && ndnsec-keygen /`whoami` | ndnsec-install-cert - \
+    && mkdir -p /usr/local/etc/ndn/keys \
+    && ndnsec-cert-dump -i /`whoami` > default.ndncert \
+    && mv default.ndncert /usr/local/etc/ndn/keys/default.ndncert
 
 RUN mkdir /share \
     && mkdir /logs
