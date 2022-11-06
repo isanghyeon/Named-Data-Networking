@@ -1,30 +1,28 @@
 version: '3'
 
-services: # consumer container
+services: # consumer Node
   node1:
     env_file:
       - .env
     image: ${IMAGES}:${TIMESTAMP}-${ENV}
     ports:
-      - "20300:6363/tcp" # ndn 1
-      - "20300:6363/udp"
-      - "20302:8080/tcp" # ndn http
-    working_dir: /usr/src/app
+      - "20101:6363/tcp" # ndn
+      - "20101:6363/udp"
+      - "20102:8080/tcp" # ndn status http daemon
     networks:
-      - node_network
+      - non_type_node_network
 
-  node2:
+  node2: # Producer Node
     env_file:
       - .env
     image: ${IMAGES}:${TIMESTAMP}-${ENV}
     ports:
-      - "20304:6363/tcp" # ndn 1
-      - "20304:6363/udp"
-      - "20306:8080/tcp" # ndn http
-    working_dir: /usr/src/app
+      - "20103:6363/tcp" # ndn
+      - "20103:6363/udp"
+      - "20104:8080/tcp" # ndn status http daemon
     networks:
-      - node_network
+      - non_type_node_network
 
 networks:
-  node_network:
+  non_type_node_network:
     driver: bridge
