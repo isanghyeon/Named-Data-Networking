@@ -24,8 +24,10 @@ RUN  apt-get update \
 
 # install ndn-cxx
 RUN git clone https://github.com/named-data/ndn-cxx.git /usr/src/app/ndn-cxx \
-    && cd /usr/src/app/ndn-cxx \
-    && ./waf configure \
+    && /usr/src/app/src/consumer.cpp /usr/src/app/ndn-cxx/example \
+    && /usr/src/app/src/producer.cpp /usr/src/app/ndn-cxx/example \
+    && cd /usr/src/app/ndn-cxx  \
+    && ./waf configure --with-examples \
     && ./waf \
     && ./waf install \
     && ldconfig \
