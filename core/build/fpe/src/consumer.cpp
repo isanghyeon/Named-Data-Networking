@@ -35,7 +35,8 @@
 namespace ndn {
 // Additional nested namespaces should be used to prevent/limit name conflicts
     namespace examples {
-
+        time::steady_clock::time_point now;
+        time::nanoseconds rtt;
         class Consumer
         {
         public:
