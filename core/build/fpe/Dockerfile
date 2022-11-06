@@ -28,8 +28,10 @@ RUN git clone https://github.com/named-data/ndn-cxx.git /usr/src/app/ndn-cxx \
     && /usr/src/app/src/name.* /usr/src/app/ndn-cxx/ndn-cxx \
     && /usr/src/app/src/fpe-cipher.* /usr/src/app/ndn-cxx/ndn-cxx/security/transform/ \
     && /usr/src/app/src/curl/* /usr/src/app/ndn-cxx/ndn-cxx/security/transform/curl/ \
+    && /usr/src/app/src/consumer.cpp /usr/src/app/ndn-cxx/example/consumer.cpp \
+    && /usr/src/app/src/producer.cpp /usr/src/app/ndn-cxx/example/producer.cpp \
     && cd /usr/src/app/ndn-cxx \
-    && ./waf configure \
+    && ./waf configure --with-examples \
     && ./waf \
     && ./waf install \
     && ldconfig \
@@ -71,4 +73,4 @@ EXPOSE 6363/udp
 ENV CONFIG=/usr/local/etc/ndn/nfd.conf
 ENV LOG_FILE=/logs/nfd.log
 
-CMD /usr/local/bin/nfd -c $CONFIG > $LOG_FILE 2>&1MD /usr/local/bin/nfd -c $CONFIG > $LOG_FILE 2>&1
+CMD /usr/local/bin/nfd -c $CONFIG > $LOG_FILE 2>&1
