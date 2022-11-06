@@ -1,28 +1,28 @@
 version: '3'
 
-services: # consumer container
+services: # consumer Node
   node1:
-    image: cpd9957/named-data-networking:2022.09-fpe
+    env_file:
+      - .env
+    image: ${IMAGES}:${TIMESTAMP}-${ENV}
     ports:
-      - "20200:6363/tcp" # ndn 1
-      - "20200:6363/udp"
-      - "20201:6363/tcp" # ndn 2
-      - "20201:6363/udp"
-      - "20202:8080/tcp" # ndn http
+      - "20101:6363/tcp" # ndn
+      - "20101:6363/udp"
+      - "20102:8080/tcp" # ndn status http daemon
     networks:
-      - node_network
+      - fpe_type_node_network
 
-  node2: 
-    image: cpd9957/named-data-networking:2022.09-fpe
+  node2: # Producer Node
+    env_file:
+      - .env
+    image: ${IMAGES}:${TIMESTAMP}-${ENV}
     ports:
-      - "20204:6363/tcp" # ndn 1
-      - "20204:6363/udp"
-      - "20205:6363/tcp" # ndn 2
-      - "20205:6363/udp"
-      - "20206:8080/tcp" # ndn http
+      - "20103:6363/tcp" # ndn
+      - "20103:6363/udp"
+      - "20104:8080/tcp" # ndn status http daemon
     networks:
-      - node_network
+      - fpe_type_node_network
 
 networks:
-  node_network:
+  fpe_type_node_network:
     driver: bridge
