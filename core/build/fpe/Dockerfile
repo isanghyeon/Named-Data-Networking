@@ -25,12 +25,12 @@ RUN  apt-get update \
 # install ndn-cxx
 RUN git clone https://github.com/named-data/ndn-cxx.git /usr/src/app/ndn-cxx \
     && mkdir -p /usr/src/app/ndn-cxx/ndn-cxx/security/transform/curl \
-    && /usr/src/app/src/name.* /usr/src/app/ndn-cxx/ndn-cxx \
-    && /usr/src/app/src/fpe-cipher.* /usr/src/app/ndn-cxx/ndn-cxx/security/transform/ \
-    && /usr/src/app/src/curl/* /usr/src/app/ndn-cxx/ndn-cxx/security/transform/curl/ \
-    && /usr/src/app/src/consumer.cpp /usr/src/app/ndn-cxx/example/consumer.cpp \
-    && /usr/src/app/src/producer.cpp /usr/src/app/ndn-cxx/example/producer.cpp \
-    && /usr/src/app/src/wscript /usr/src/app/ndn-cxx/ \
+    && cp -r /usr/src/app/src/name.* /usr/src/app/ndn-cxx/ndn-cxx \
+    && cp -r  /usr/src/app/src/fpe-cipher.* /usr/src/app/ndn-cxx/ndn-cxx/security/transform/ \
+    && cp -r  /usr/src/app/src/curl/* /usr/src/app/ndn-cxx/ndn-cxx/security/transform/curl/ \
+    && cp -r  /usr/src/app/src/consumer.cpp /usr/src/app/ndn-cxx/example/consumer.cpp \
+    && cp -r  /usr/src/app/src/producer.cpp /usr/src/app/ndn-cxx/example/producer.cpp \
+    && cp -r  /usr/src/app/src/wscript /usr/src/app/ndn-cxx/ \
     && cd /usr/src/app/ndn-cxx \
     && ./waf configure --with-examples \
     && ./waf \
