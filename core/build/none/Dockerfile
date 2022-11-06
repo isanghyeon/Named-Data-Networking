@@ -67,4 +67,4 @@ EXPOSE 6363/udp
 ENV CONFIG=/usr/local/etc/ndn/nfd.conf
 ENV LOG_FILE=/logs/nfd.log
 
-CMD /usr/local/bin/nfd -c $CONFIG > $LOG_FILE 2>&1MD /usr/local/bin/nfd -c $CONFIG > $LOG_FILE 2>&1
+CMD /usr/local/bin/nfd -c $CONFIG > $LOG_FILE 2>&1
