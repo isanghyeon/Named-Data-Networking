@@ -20,7 +20,8 @@ RUN  apt-get update \
      && apt-get install -y build-essential pkg-config python3-minimal libboost-all-dev libssl-dev libsqlite3-dev python3-sphinx \
      && apt-get install -y doxygen graphviz python3-pip \
      && apt-get install -y gcc g++ clang cmake make software-properties-common libpcap-dev libsystemd-dev valgrind libwebsocketpp-dev libcurl4-openssl-dev \
-     && apt-get install -y zlib1g-dev libncurses5-dev libgdbm-dev libnss3-dev libssl-dev libreadline-dev libffi-dev libsqlite3-dev libbz2-dev sphinxcontrib-doxylink
+     && apt-get install -y zlib1g-dev libncurses5-dev libgdbm-dev libnss3-dev libssl-dev libreadline-dev libffi-dev libsqlite3-dev libbz2-dev \
+     && pip3 install --user sphinx sphinxcontrib-doxylink
 
 # install Python3
 #RUN mkdir -p /usr/src/app/python@3 \
