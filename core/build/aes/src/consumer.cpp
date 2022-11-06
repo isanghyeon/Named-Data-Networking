@@ -19,11 +19,17 @@
  * See AUTHORS.md for complete list of ndn-cxx authors and contributors.
  */
 
+//
+// Created by 이상현 on 2022/11/07.
+//
+
+
 #include <ndn-cxx/face.hpp>
 #include <ndn-cxx/security/validator-config.hpp>
-#include <ndn-cxx/util/random.hpp>
+#include <ndn-cxx/util/time.hpp>
 
 #include <iostream>
+#include <fstream>
 
 // Enclosing code in ndn simplifies coding (can also use `using namespace ndn`)
 namespace ndn {
@@ -31,28 +37,28 @@ namespace ndn {
     namespace examples {
         time::steady_clock::time_point now;
         time::nanoseconds rtt;
-
-        class Consumer {
+        class Consumer
+        {
         public:
-            Consumer() {
+            Consumer()
+            {
                 m_validator.load("trust-schema.conf");
             }
 
             void
-            run() {
+            run()
+            {
+                // Name interestName("/example/testApp/randomData");
                 Name interestName("/sch.ac.kr/calab/research.file");
                 interestName.appendVersion();
 
                 Interest interest(interestName);
                 interest.setMustBeFresh(true);
                 interest.setInterestLifetime(6_s); // The default is 4 seconds
-                
-                now = time::steady_clock::now();
-                
-                std::cout << "Sending Interest " << interest << std::endl;
 
+                std::cout << "Sending Interest " << interest << std::endl;
                 m_face.expressInterest(interest,
-                                       std::bind(&Consumer::onData, this, _1, _2),
+                                       std::bind(&Consumer::onData, this,  _1, _2),
                                        std::bind(&Consumer::onNack, this, _1, _2),
                                        std::bind(&Consumer::onTimeout, this, _1));
 
@@ -62,32 +68,32 @@ namespace ndn {
 
         private:
             void
-            onData(const Interest &, const Data &data) {
+            onData(const Interest&, const Data& data)
+            {
                 rtt = time::steady_clock::now() - now;
+                // fp << rtt << endl;
 
                 std::cout << "Received Data " << data << std::endl;
-                std::cout << "\n" << std::endl;
-                std::cout << "Content Data " << data.getContent() << std::endl;
-                std::cout << "Round Trim Time " << rtt << std::endl;
-                
-                std::cout << "\n" << std::endl;
+                std::cout << "Round-Trip Time " << rtt << std::endl;
 
 //                m_validator.validate(data,
-//                                     [](const Data &) {
+//                                     [] (const Data&) {
 //                                         std::cout << "Data conforms to trust schema" << std::endl;
 //                                     },
-//                                     [](const Data &, const security::ValidationError &error) {
+//                                     [] (const Data&, const security::ValidationError& error) {
 //                                         std::cout << "Error authenticating data: " << error << std::endl;
 //                                     });
             }
 
             void
-            onNack(const Interest &, const lp::Nack &nack) const {
+            onNack(const Interest&, const lp::Nack& nack) const
+            {
                 std::cout << "Received Nack with reason " << nack.getReason() << std::endl;
             }
 
             void
-            onTimeout(const Interest &interest) const {
+            onTimeout(const Interest& interest) const
+            {
                 std::cout << "Timeout for " << interest << std::endl;
             }
 
@@ -100,13 +106,14 @@ namespace ndn {
 } // namespace ndn
 
 int
-main(int argc, char **argv) {
+main(int argc, char** argv)
+{
     try {
         ndn::examples::Consumer consumer;
         consumer.run();
         return 0;
     }
-    catch (const std::exception &e) {
+    catch (const std::exception& e) {
         std::cerr << "ERROR: " << e.what() << std::endl;
         return 1;
     }

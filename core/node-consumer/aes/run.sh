@@ -23,13 +23,8 @@ if [ "$RESULT" == "$TIMESTAMP-$ENV" ]; then
 
   sleep 3
 
-  # apt-get update; apt-get install -y docker-compose
-
   mv shared/log/$ENV.log shared/log/"$ENV-$(date +%Y.%m.%dT%H:%M:%S)".log
 
-  docker-compose stop
-  docker-compose down
-  docker-compose rm -f
   docker-compose build
   docker-compose up -d
   docker-compose logs -f >>shared/log/$ENV.log &
