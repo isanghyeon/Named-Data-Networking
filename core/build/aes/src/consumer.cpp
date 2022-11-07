@@ -42,7 +42,7 @@ namespace ndn {
         public:
             Consumer()
             {
-                m_validator.load("trust-schema.conf");
+                // m_validator.load("trust-schema.conf");
             }
 
             void
@@ -73,7 +73,8 @@ namespace ndn {
                 rtt = time::steady_clock::now() - now;
                 // fp << rtt << endl;
 
-                std::cout << "Received Data " << data << std::endl;
+                std::cout << "Received Data " << "\n" << data << std::endl;
+                std::cout << "data " << hex << data.getContent() << std.endl;
                 std::cout << "Round-Trip Time " << rtt << std::endl;
 
 //                m_validator.validate(data,
