@@ -39,7 +39,7 @@ namespace ndn {
         public:
             Consumer()
             {
-                m_validator.load("trust-schema.conf");
+                // m_validator.load("trust-schema.conf");
             }
 
             void
