@@ -74,7 +74,7 @@ namespace ndn {
                 // fp << rtt << endl;
 
                 std::cout << "Received Data " << "\n" << data << std::endl;
-                std::cout << "data " << hex << data.getContent() << std.endl;
+                std::cout << "data " << data.getContent() << std.endl;
                 std::cout << "Round-Trip Time " << rtt << std::endl;
 
 //                m_validator.validate(data,
