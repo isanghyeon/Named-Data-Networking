@@ -56,7 +56,8 @@ async def appKeyExchange(Authorization: list[str] | None = Header(default=None))
             "name": f"{Authorization[0]}:node-key:{node_id}",
             "value": Authorization[1]
         })
-
+    except:
+        pass
     finally:
         apiPuKey = (await redisObject(db=1).getObject(object=f"{Authorization[0]}:public-key", types=True))[0]
 

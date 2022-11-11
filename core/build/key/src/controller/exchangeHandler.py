@@ -57,10 +57,12 @@ class exchange:
     async def encryptHandler(self) -> tuple[str, str, str]:
         await self.getPrKeyInDB()
 
+        print(f"[*] encryptHandler :: {self.AsymmetricObject.encrypt(self.sKey)}, {len(self.AsymmetricObject.encrypt(self.sKey))}")
+
         self.fpeKey = base64.b64encode(self.symmetricObject.encrypt(self.fpeKey)).decode('utf-8')
         self.fpeTweak = base64.b64encode(self.symmetricObject.encrypt(self.fpeTweak)).decode('utf-8')
         self.sKey = base64.b64encode(self.AsymmetricObject.encrypt(self.sKey)).decode('utf-8')
-
+        print("[*] encryptHandler :: self.sKey, self.fpeKey, self.fpeTweak :: ", self.sKey, self.fpeKey, self.fpeTweak)
         return self.sKey, self.fpeKey, self.fpeTweak
 
     async def decryptHandler(self) -> tuple[str, str, str]:
